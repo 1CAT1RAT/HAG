@@ -7,6 +7,8 @@
     <meta name="description" content="Stinky Losers — a multiverse relationship matrix and character-driven story." />
     <meta property="og:title" content="Stinky Losers" />
     <meta property="og:description" content="Explore characters, their relationships, and the story world." />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="garage.css">
     <style>
       :root{ --bg:#e9e9e9; --card:#ffffff; --accent:#404040 }
       html,body{height:100%;margin:0;font-family:'Courier New',Courier,monospace;background:var(--bg);color:var(--accent)}
@@ -21,6 +23,29 @@
     </style>
   </head>
   <body>
+    <!-- GARAGE DOOR OVERLAY -->
+    <div id="garageOverlay">
+      <img src="images/garage.png" alt="Garage Door" id="garageImg">
+    </div>
+
+    <!-- LOADING SCREEN -->
+    <div id="loadingScreen">
+      <div id="logo">UNTITLED</div>
+      <div id="progressBar"><div></div></div>
+    </div>
+
+    <header class="topbar">
+      <div class="title">HAG</div>
+      <div class="menuBtn">☰</div>
+    </header>
+
+    <nav class="menu">
+      <a href="index.html">Home</a>
+      <a href="chart.html">Matrix</a>
+      <a href="characters.html">Characters</a>
+      <a href="story.html">Story</a>
+    </nav>
+
     <div class="wrap">
       <h1>STINKY LOSERS</h1>
       <p class="lead">A small multiverse experiment — meet the characters, inspect the relationship matrix, and read the story threads that bind them.</p>
@@ -42,6 +67,22 @@
       <footer>
         <div>Hosted with GitHub Pages — <a href="https://1CAT1RAT.github.io/HAG/">Live site</a></div>
       </footer>
-    </div>
+      </div>
+
+      <script src="garage.js"></script>
+      <script src="loading.js"></script>
+      <script>
+        // Generic fallback for any inline icons that fail to load (covers case-sensitive host issues)
+        document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('img').forEach(img => {
+            try {
+              const src = img.getAttribute('src') || '';
+              if (src.indexOf('icons/') !== -1) {
+                img.onerror = () => { img.onerror = null; img.src = 'icons/bloo_icon.png'; };
+              }
+            } catch (e) { /* ignore */ }
+          });
+        });
+      </script>
   </body>
 </html>

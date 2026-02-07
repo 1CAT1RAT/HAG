@@ -52,21 +52,42 @@
   <line class="roam-line roam-line-3" x1="20" y1="30" x2="80" y2="70" stroke="#404040" stroke-width="0.3" opacity="0.12"/>
 </svg>
 
+<header class="topbar">
+  <div class="title">STORY</div>
+  <div class="menuBtn">☰</div>
+</header>
+
 <nav class="menu">
+  <a href="index.html">Home</a>
   <a href="chart.html">Matrix</a>
   <a href="characters.html">Characters</a>
   <a href="story.html">Story</a>
 </nav>
 
-<header class="topbar">
-  <div class="title"><a href="index.html" style="color:inherit; text-decoration:none;">HAG</a></div>
-  <div style="display:flex;gap:12px;align-items:center;">
-    <a href="index.html" style="color:inherit; text-decoration:none; font-size:14px;">Home</a>
-    <a href="chart.html" style="color:inherit; text-decoration:none; font-size:14px;">Matrix</a>
-    <a href="characters.html" style="color:inherit; text-decoration:none; font-size:14px;">Characters</a>
-    <a href="story.html" style="color:inherit; text-decoration:none; font-size:14px;">Story</a>
-  </div>
-</header>
+<!-- GARAGE DOOR OVERLAY -->
+<div id="garageOverlay">
+  <img src="images/garage.png" alt="Garage Door" id="garageImg">
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div id="logo">UNTITLED</div>
+  <div id="progressBar"><div></div></div>
+</div>
+
+<script>
+  // Generic fallback for any inline icons that fail to load (covers case-sensitive host issues)
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('img').forEach(img => {
+      try {
+        const src = img.getAttribute('src') || '';
+        if (src.indexOf('icons/') !== -1) {
+          img.onerror = () => { img.onerror = null; img.src = 'icons/bloo_icon.png'; };
+        }
+      } catch (e) { }
+    });
+  });
+</script>
 
 <div class="wrapper">
   <div class="story-container">
