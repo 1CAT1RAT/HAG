@@ -2,6 +2,32 @@
 window.onload = async () => {
   console.log('characters.js: window.onload fired');
   let charactersData = [];
+  let detailViewOpen = false;
+
+  // Function to calculate relationship stats from matrix data
+  function calculateRelationshipStats(characterIndex) {
+    if (typeof MATRIX_DATA === 'undefined' || !MATRIX_DATA[characterIndex]) {
+      return { allies: 0, rivals: 0, neutral: 0 };
+    }
+    
+    const row = MATRIX_DATA[characterIndex];
+    let allies = 0, rivals = 0, neutral = 0;
+    
+    for (let i = 0; i < row.length; i++) {
+      if (i === characterIndex) continue; // skip self
+      const value = row[i];
+      
+      if (value === 1) {
+        allies++;
+      } else if (value === 5) {
+        rivals++;
+      } else {
+        neutral++;
+      }
+    }
+    
+    return { allies, rivals, neutral };
+  }
 
   // Load character data from JSON file
   try {
@@ -13,9 +39,9 @@ window.onload = async () => {
     // Fallback data (used when fetch fails, e.g., file:// CORS)
     charactersData = {
       characters: [
-        { name: 'Fallback One', role: 'Agent', color: '#808080', backstory: 'Fallback character.', strength: 6, connectionScore: 20 },
-        { name: 'Fallback Two', role: 'Rival', color: '#606060', backstory: 'Fallback character two.', strength: 5, connectionScore: 15 },
-        { name: 'Fallback Three', role: 'Neutral', color: '#909090', backstory: 'Fallback character three.', strength: 4, connectionScore: 10 }
+        { name: 'Fallback One', role: 'Agent', color: '#808080', aboutThem: 'Fallback character.', backstory: 'put backstory here', stats: { str: 5, def: 5, dex: 5, int: 5, chr: 5, spd: 5 } },
+        { name: 'Fallback Two', role: 'Rival', color: '#606060', aboutThem: 'Fallback character two.', backstory: 'put backstory here', stats: { str: 6, def: 4, dex: 5, int: 5, chr: 3, spd: 5 } },
+        { name: 'Fallback Three', role: 'Neutral', color: '#909090', aboutThem: 'Fallback character three.', backstory: 'put backstory here', stats: { str: 4, def: 5, dex: 5, int: 6, chr: 5, spd: 5 } }
       ]
     };
   }
@@ -121,6 +147,7 @@ window.onload = async () => {
   }, 100);
 
   function closeDetailView() {
+    detailViewOpen = false;
     detailOverlay.classList.remove("show");
     detailContainer.classList.remove("show");
     closeDetailBtn.classList.remove("show");
@@ -129,15 +156,28 @@ window.onload = async () => {
     
     setTimeout(() => {
       detailContainer.innerHTML = "";
-    }, 1000);
+    }, 500);
   }
 
   function showDetailView(char, index) {
+    // Prevent opening if detail view is already open (cooldown)
+    if (detailViewOpen) {
+      return;
+    }
+    detailViewOpen = true;
+
     // Hide grid
     grid.classList.add("hidden");
     document.body.style.overflow = "hidden";
 
     const iconName = char.name.toLowerCase().replaceAll(" ", "_");
+    const renderName = char.name.toLowerCase().replaceAll(" ", "_");
+
+    // Calculate relationship stats from matrix
+    const relationshipStats = calculateRelationshipStats(index);
+    char.allies = relationshipStats.allies;
+    char.rivals = relationshipStats.rivals;
+    char.neutral = relationshipStats.neutral;
 
     // Create detail view
     detailContainer.innerHTML = `
@@ -151,8 +191,13 @@ window.onload = async () => {
 
       <div class="char-detail-content">
         <div class="detail-section">
+          <h3>About Them</h3>
+          <p>${char.aboutThem}</p>
+        </div>
+
+        <div class="detail-section">
           <h3>Backstory</h3>
-          <p>${char.backstory}</p>
+          <p class="backstory-text">${char.backstory}</p>
         </div>
 
         <div class="detail-section">
@@ -160,43 +205,75 @@ window.onload = async () => {
           <div class="stat-row">
             <span class="stat-label">Allies</span>
             <div class="stat-bar">
-              <div class="stat-fill" style="width: 65%; background: linear-gradient(90deg, ${char.color}, rgba(124, 58, 237, 0.8));"></div>
+              <div class="stat-fill" style="width: ${(char.allies / 18) * 100}%; background: linear-gradient(90deg, ${char.color}, rgba(124, 58, 237, 0.8));"></div>
             </div>
-            <span class="stat-value">13</span>
+            <span class="stat-value">${char.allies}</span>
           </div>
           <div class="stat-row">
             <span class="stat-label">Rivals</span>
             <div class="stat-bar">
-              <div class="stat-fill" style="width: 45%; background: linear-gradient(90deg, #ef4444, rgba(124, 58, 237, 0.8));"></div>
+              <div class="stat-fill" style="width: ${(char.rivals / 18) * 100}%; background: linear-gradient(90deg, #ef4444, rgba(124, 58, 237, 0.8));"></div>
             </div>
-            <span class="stat-value">9</span>
+            <span class="stat-value">${char.rivals}</span>
           </div>
           <div class="stat-row">
             <span class="stat-label">Neutral</span>
             <div class="stat-bar">
-              <div class="stat-fill" style="width: 35%; background: linear-gradient(90deg, #8b7355, rgba(124, 58, 237, 0.8));"></div>
+              <div class="stat-fill" style="width: ${(char.neutral / 18) * 100}%; background: linear-gradient(90deg, #8b7355, rgba(124, 58, 237, 0.8));"></div>
             </div>
-            <span class="stat-value">7</span>
+            <span class="stat-value">${char.neutral}</span>
           </div>
         </div>
 
         <div class="detail-section">
-          <h3>Overall Strength</h3>
+          <h3>Character Stats</h3>
           <div class="stat-row">
-            <span class="stat-label">Power Level</span>
+            <span class="stat-label">STR</span>
             <div class="stat-bar">
-              <div class="stat-fill" style="width: ${char.strength * 12.5}%; background: linear-gradient(90deg, ${char.color}, rgba(124, 58, 237, 0.8));"></div>
+              <div class="stat-fill" style="width: ${(char.stats.str / 10) * 100}%; background: linear-gradient(90deg, #ff6b6b, rgba(124, 58, 237, 0.8));"></div>
             </div>
-            <span class="stat-value">${char.strength}/10</span>
+            <span class="stat-value">${char.stats.str}/10</span>
           </div>
           <div class="stat-row">
-            <span class="stat-label">Connection Score</span>
+            <span class="stat-label">DEF</span>
             <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.connectionScore / 50) * 100}%; background: linear-gradient(90deg, #7c3aed, #a78bfa);"></div>
+              <div class="stat-fill" style="width: ${(char.stats.def / 10) * 100}%; background: linear-gradient(90deg, #4ecdc4, rgba(124, 58, 237, 0.8));"></div>
             </div>
-            <span class="stat-value">${char.connectionScore}/50</span>
+            <span class="stat-value">${char.stats.def}/10</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">DEX</span>
+            <div class="stat-bar">
+              <div class="stat-fill" style="width: ${(char.stats.dex / 10) * 100}%; background: linear-gradient(90deg, #ffe66d, rgba(124, 58, 237, 0.8));"></div>
+            </div>
+            <span class="stat-value">${char.stats.dex}/10</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">INT</span>
+            <div class="stat-bar">
+              <div class="stat-fill" style="width: ${(char.stats.int / 10) * 100}%; background: linear-gradient(90deg, #a29bfe, rgba(124, 58, 237, 0.8));"></div>
+            </div>
+            <span class="stat-value">${char.stats.int}/10</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CHR</span>
+            <div class="stat-bar">
+              <div class="stat-fill" style="width: ${(char.stats.chr / 10) * 100}%; background: linear-gradient(90deg, #fd79a8, rgba(124, 58, 237, 0.8));"></div>
+            </div>
+            <span class="stat-value">${char.stats.chr}/10</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">SPD</span>
+            <div class="stat-bar">
+              <div class="stat-fill" style="width: ${(char.stats.spd / 10) * 100}%; background: linear-gradient(90deg, #74b9ff, rgba(124, 58, 237, 0.8));"></div>
+            </div>
+            <span class="stat-value">${char.stats.spd}/10</span>
           </div>
         </div>
+      </div>
+
+      <div class="char-detail-render">
+        <img src="images/${renderName}_render.png" alt="${char.name} Render" class="char-render" onerror="this.onerror=null;this.src='images/bloo_render.png'">
       </div>
     `;
 
@@ -209,6 +286,8 @@ window.onload = async () => {
     setTimeout(() => {
       const dimg = detailContainer.querySelector('.char-detail-icon');
       if (dimg) dimg.onerror = () => { dimg.onerror = null; dimg.src = 'icons/bloo_icon.png'; };
+      const rimg = detailContainer.querySelector('.char-render');
+      if (rimg) rimg.onerror = () => { rimg.onerror = null; rimg.src = 'images/bloo_render.png'; };
     }, 40);
   }
 

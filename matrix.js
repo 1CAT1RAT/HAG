@@ -1,8 +1,8 @@
 
-window.onload = () => {
-const characters = ["gorgon","Chevy","JP","Jeremy","Tea","FNFFan","Irish","Umbra",
+// Expose data globally for use in other pages
+const MATRIX_CHARACTERS = ["gorgon","Chevy","JP","Jeremy","Tea","FNFFan","Irish","Umbra",
 "Rebecca","Chao","Bloo","Good Woman","Evil Man","PM73","Killer Jeremy","Pestilence","Queen of Jesters","Green Guy"];
-const matrix = [
+const MATRIX_DATA = [
   [3,2,2,2,2,2,1,2,4,3,2,2,5,5,5,5,3,2],
   [2,1,2,2,2,2,2,2,2,2,2,2,5,5,3,5,5,3],
   [2,2,5,2,3,3,2,2,3,3,3,2,5,5,5,5,2,2],
@@ -20,10 +20,11 @@ const matrix = [
   [5,3,4,5,5,5,5,5,5,4,5,4,2,3,5,2,2,3],
   [5,3,3,3,3,3,3,3,2,3,5,3,3,3,2,3,3,3],
   [2,3,2,2,3,5,5,3,5,4,3,4,2,5,2,3,1,3],
-  [2,2,2,3,2,2,2,2,2,3,3,2,4,4,3,4,3,2]
 ];
 
-const chart = document.getElementById("chart");
+window.onload = () => {
+const characters = MATRIX_CHARACTERS;
+const matrix = MATRIX_DATA;
 chart.style.setProperty("--count",characters.length);
 const relationshipCard = document.getElementById("relationshipCard");
 
