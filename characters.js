@@ -189,7 +189,53 @@ window.onload = async () => {
         <p class="char-detail-role">${char.role}</p>
       </div>
 
-      <div class="char-detail-content">
+      <div class="char-detail-stats">
+        <h3>Character Stats</h3>
+        <div class="stat-row">
+          <span class="stat-label">STR</span>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: ${(char.stats.str / 10) * 100}%; background: linear-gradient(90deg, #ff6b6b, rgba(124, 58, 237, 0.8));"></div>
+          </div>
+          <span class="stat-value">${char.stats.str}/10</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">DEF</span>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: ${(char.stats.def / 10) * 100}%; background: linear-gradient(90deg, #4ecdc4, rgba(124, 58, 237, 0.8));"></div>
+          </div>
+          <span class="stat-value">${char.stats.def}/10</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">DEX</span>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: ${(char.stats.dex / 10) * 100}%; background: linear-gradient(90deg, #ffe66d, rgba(124, 58, 237, 0.8));"></div>
+          </div>
+          <span class="stat-value">${char.stats.dex}/10</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">INT</span>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: ${(char.stats.int / 10) * 100}%; background: linear-gradient(90deg, #a29bfe, rgba(124, 58, 237, 0.8));"></div>
+          </div>
+          <span class="stat-value">${char.stats.int}/10</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">CHR</span>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: ${(char.stats.chr / 10) * 100}%; background: linear-gradient(90deg, #fd79a8, rgba(124, 58, 237, 0.8));"></div>
+          </div>
+          <span class="stat-value">${char.stats.chr}/10</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">SPD</span>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: ${(char.stats.spd / 10) * 100}%; background: linear-gradient(90deg, #74b9ff, rgba(124, 58, 237, 0.8));"></div>
+          </div>
+          <span class="stat-value">${char.stats.spd}/10</span>
+        </div>
+      </div>
+
+      <div class="char-detail-info">
         <div class="detail-section">
           <h3>About Them</h3>
           <p>${char.aboutThem}</p>
@@ -222,52 +268,6 @@ window.onload = async () => {
               <div class="stat-fill" style="width: ${(char.neutral / 18) * 100}%; background: linear-gradient(90deg, #8b7355, rgba(124, 58, 237, 0.8));"></div>
             </div>
             <span class="stat-value">${char.neutral}</span>
-          </div>
-        </div>
-
-        <div class="detail-section">
-          <h3>Character Stats</h3>
-          <div class="stat-row">
-            <span class="stat-label">STR</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.stats.str / 10) * 100}%; background: linear-gradient(90deg, #ff6b6b, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.stats.str}/10</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">DEF</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.stats.def / 10) * 100}%; background: linear-gradient(90deg, #4ecdc4, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.stats.def}/10</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">DEX</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.stats.dex / 10) * 100}%; background: linear-gradient(90deg, #ffe66d, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.stats.dex}/10</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">INT</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.stats.int / 10) * 100}%; background: linear-gradient(90deg, #a29bfe, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.stats.int}/10</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">CHR</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.stats.chr / 10) * 100}%; background: linear-gradient(90deg, #fd79a8, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.stats.chr}/10</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">SPD</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.stats.spd / 10) * 100}%; background: linear-gradient(90deg, #74b9ff, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.stats.spd}/10</span>
           </div>
         </div>
       </div>
