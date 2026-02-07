@@ -3,17 +3,45 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>StinkyLosers — Redirect</title>
-    <meta http-equiv="refresh" content="0;url=characters.html" />
+    <title>HAG — Stinky Losers</title>
+    <meta name="description" content="Stinky Losers — a multiverse relationship matrix and character-driven story." />
+    <meta property="og:title" content="Stinky Losers" />
+    <meta property="og:description" content="Explore characters, their relationships, and the story world." />
     <style>
-      body{font-family:Arial,Helvetica,sans-serif;background:#f5f5f5;color:#333;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
-      a{color:#0066cc}
+      :root{ --bg:#e9e9e9; --card:#ffffff; --accent:#404040 }
+      html,body{height:100%;margin:0;font-family:'Courier New',Courier,monospace;background:var(--bg);color:var(--accent)}
+      .wrap{max-width:980px;margin:48px auto;padding:36px;background:var(--card);border:1px solid #d0d0d0;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,0.06)}
+      h1{margin:0 0 8px 0;letter-spacing:2px}
+      p.lead{color:#606060;margin-top:6px}
+      .buttons{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+      .btn{display:inline-block;padding:10px 14px;border-radius:6px;background:#f0f0f0;border:1px solid #cfcfcf;color:var(--accent);text-decoration:none;font-weight:700}
+      .muted{color:#808080;font-size:13px;margin-top:18px}
+      footer{margin-top:28px;color:#707070;font-size:13px}
+      .credits{margin-top:12px}
     </style>
   </head>
   <body>
-    <div>
-      <h2>Opening site…</h2>
-      <p>If you are not redirected automatically, <a href="characters.html">click here to open the Characters page</a>.</p>
+    <div class="wrap">
+      <h1>STINKY LOSERS</h1>
+      <p class="lead">A small multiverse experiment — meet the characters, inspect the relationship matrix, and read the story threads that bind them.</p>
+
+      <div class="buttons">
+        <a class="btn" href="characters.html">Characters</a>
+        <a class="btn" href="chart.html">Relationship Matrix</a>
+        <a class="btn" href="story.html">Story</a>
+        <a class="btn" href="https://github.com/1CAT1RAT/HAG" target="_blank">Repository</a>
+      </div>
+
+      <p class="muted">Tip: click a character to view details. In the matrix view you can click a column header to see that character's total score (self-score excluded).</p>
+
+      <div class="credits">
+        <strong>About</strong>
+        <p class="muted">This project is a lightweight interactive prototype — built with HTML, CSS, and vanilla JavaScript. Feel free to fork the repo and contribute.</p>
+      </div>
+
+      <footer>
+        <div>Hosted with GitHub Pages — <a href="https://1CAT1RAT.github.io/HAG/">Live site</a></div>
+      </footer>
     </div>
   </body>
 </html>
