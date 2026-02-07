@@ -1,6 +1,6 @@
 
 window.onload = () => {
-const characters = ["Gorgon","Chevy","JP","Jeremy","Tea","FNFFan","Irish","Umbra",
+const characters = ["gorgon","Chevy","JP","Jeremy","Tea","FNFFan","Irish","Umbra",
 "Rebecca","Chao","Bloo","Good Woman","Evil Man","PM73","Killer Jeremy","Pestilence","Queen of Jesters","Green Guy"];
 const matrix = [
   [3,2,2,2,2,2,1,2,4,3,2,2,5,5,5,5,3,2],

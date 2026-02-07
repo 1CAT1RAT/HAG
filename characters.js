@@ -37,10 +37,10 @@ window.onload = async () => {
     card.innerHTML = `
       <div class="card-glow"></div>
       <div class="card-inner">
-        <div class="card-icon-wrapper">
-          <img src="icons/${iconName}_icon.png" alt="${char.name}" class="card-icon">
-          <div class="icon-bg" style="background: ${char.color}30;"></div>
-        </div>
+          <div class="card-icon-wrapper">
+            <img src="icons/${iconName}_icon.png" alt="${char.name}" class="card-icon" onerror="this.onerror=null;this.src='icons/bloo_icon.png'">
+            <div class="icon-bg" style="background: ${char.color}30;"></div>
+          </div>
         <div class="card-info">
           <h3>${char.name}</h3>
           <p>${char.role}</p>
@@ -80,7 +80,7 @@ window.onload = async () => {
     
     setTimeout(() => {
       detailContainer.innerHTML = "";
-    }, 500);
+    }, 1000);
   }
 
   function showDetailView(char, index) {
@@ -94,7 +94,7 @@ window.onload = async () => {
     detailContainer.innerHTML = `
       <div class="char-detail-card">
         <div class="char-detail-icon-wrapper">
-          <img src="icons/${iconName}_icon.png" alt="${char.name}" class="char-detail-icon">
+          <img src="icons/${iconName}_icon.png" alt="${char.name}" class="char-detail-icon" onerror="this.onerror=null;this.src='icons/bloo_icon.png'">
         </div>
         <h2 class="char-detail-name" style="color: ${char.color}">${char.name}</h2>
         <p class="char-detail-role">${char.role}</p>
