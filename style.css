@@ -19,6 +19,9 @@ body {
   position: relative;
 }
 
+/* Prevent horizontal panning while allowing vertical scroll and natural pinch-zoom behavior */
+html, body { touch-action: pan-y; }
+
 /* Animated roaming lines background */
 svg.roaming-lines {
   position: fixed;
@@ -203,7 +206,8 @@ svg.roaming-lines {
 /* wrapper */
 .wrapper{ 
   height:calc(100vh - 140px); 
-  overflow:auto; 
+  overflow-y:auto; 
+  overflow-x:hidden; 
   display:flex; 
   flex-direction: column;
   justify-content:flex-start; 
@@ -212,6 +216,12 @@ svg.roaming-lines {
   position: relative;
   z-index: 2;
   background: transparent;
+}
+
+/* Chart container horizontal overscroll containment */
+.chart {
+  overscroll-behavior-x: contain;
+  overflow-x: auto;
 }
 
 .wrapper h1 {

@@ -417,6 +417,13 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
+/* Improve readability by adding a subtle background for long text blocks */
+.detail-section p {
+  background: rgba(255,255,255,0.9);
+  padding: 10px;
+  border-radius: 4px;
+}
+
 .stat-row {
   display: flex;
   align-items: center;

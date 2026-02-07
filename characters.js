@@ -57,6 +57,13 @@ window.onload = async () => {
     grid.appendChild(card);
   });
 
+  // Add fallback for any icon that fails to load (use existing bloo_icon.png)
+  setTimeout(() => {
+    document.querySelectorAll('.card-icon').forEach(img => {
+      img.onerror = () => { img.onerror = null; img.src = 'icons/bloo_icon.png'; };
+    });
+  }, 50);
+
   // Debug: report how many cards were appended
   setTimeout(() => {
     const count = grid.querySelectorAll('.char-card').length;
@@ -148,6 +155,12 @@ window.onload = async () => {
     detailOverlay.classList.add("show");
     detailContainer.classList.add("show");
     closeDetailBtn.classList.add("show");
+
+    // Ensure detail icon has a fallback too
+    setTimeout(() => {
+      const dimg = detailContainer.querySelector('.char-detail-icon');
+      if (dimg) dimg.onerror = () => { dimg.onerror = null; dimg.src = 'icons/bloo_icon.png'; };
+    }, 40);
   }
 
   // Close detail view
