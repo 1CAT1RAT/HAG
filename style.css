@@ -207,11 +207,11 @@ svg.roaming-lines {
 .wrapper{ 
   height:calc(100vh - 140px); 
   overflow-y:auto; 
-  overflow-x:hidden; 
+  overflow-x:auto; 
   display:flex; 
   flex-direction: column;
   justify-content:flex-start; 
-  align-items:center;
+  align-items:flex-start;
   padding: 20px;
   position: relative;
   z-index: 2;
