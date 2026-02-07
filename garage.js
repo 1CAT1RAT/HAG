@@ -57,8 +57,12 @@ function closeGarage(callback) {
     }, 10);
 }
 
-// Get current page filename
-const currentPage = window.location.pathname.split("/").pop() || "chart.html";
+// Get current page filename. If URL ends with a trailing slash (GitHub Pages root), treat as index.html
+let currentPage = window.location.pathname.split("/").pop();
+if (!currentPage) {
+    // URL like /HAG/ -> no filename, treat as index.html
+    currentPage = 'index.html';
+}
 
 // NAVIGATION LINKS - trigger garage close before navigation
 document.querySelectorAll(".menu a").forEach(link => {
