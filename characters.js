@@ -105,7 +105,7 @@ window.onload = async () => {
     const tryNext = () => {
       if (idx >= candidates.length) {
         console.warn(`characters.js: all icon attempts failed for ${baseName}, using default`);
-        imgEl.src = 'icons/bloo_icon.png';
+        imgEl.src = 'icons/green_guy_icon.png';
         return;
       }
       const url = candidates[idx++];
@@ -156,7 +156,7 @@ window.onload = async () => {
     
     setTimeout(() => {
       detailContainer.innerHTML = "";
-    }, 500);
+    }, 1000);
   }
 
   function showDetailView(char, index) {
@@ -273,7 +273,7 @@ window.onload = async () => {
       </div>
 
       <div class="char-detail-render">
-        <img src="renders/${renderName}_render.png" alt="${char.name} Render" class="char-render" onerror="this.onerror=null;this.src='images/bloo_render.png'">
+        <img src="renders/${renderName}_render.png" alt="${char.name} Render" class="char-render" onerror="this.onerror=null;this.src='renders/placeholder_render.png'">
       </div>
     `;
 
@@ -285,9 +285,9 @@ window.onload = async () => {
     // Ensure detail icon has a fallback too
     setTimeout(() => {
       const dimg = detailContainer.querySelector('.char-detail-icon');
-      if (dimg) dimg.onerror = () => { dimg.onerror = null; dimg.src = 'icons/bloo_icon.png'; };
+      if (dimg) dimg.onerror = () => { dimg.onerror = null; dimg.src = 'icons/green_guy_icon.png'; };
       const rimg = detailContainer.querySelector('.char-render');
-      if (rimg) rimg.onerror = () => { rimg.onerror = null; rimg.src = 'renders/bloo_render.png'; };
+      if (rimg) rimg.onerror = () => { rimg.onerror = null; rimg.src = 'renders/placeholder_render.png'; };
     }, 40);
   }
 
