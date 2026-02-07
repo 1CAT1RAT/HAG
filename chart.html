@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Multiverse Relation Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="relationship.css">
+<link rel="stylesheet" href="garage.css">
+</head>
+<body>
+
+<!-- ROAMING LINES BACKGROUND -->
+<svg class="roaming-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <line class="roam-line roam-line-1" x1="10" y1="50" x2="90" y2="50" stroke="#404040" stroke-width="0.3" opacity="0.15"/>
+  <line class="roam-line roam-line-2" x1="50" y1="10" x2="50" y2="90" stroke="#404040" stroke-width="0.3" opacity="0.1"/>
+  <line class="roam-line roam-line-3" x1="20" y1="30" x2="80" y2="70" stroke="#404040" stroke-width="0.3" opacity="0.12"/>
+</svg>
+
+<!-- Garage overlay -->
+<div id="garageOverlay">
+  <img src="images/garage.png" alt="Garage Door" id="garageImg">
+</div>
+
+<!-- Loading screen -->
+<div id="loadingScreen">
+  <div id="logo">UNTITLED</div>
+  <div id="progressBar"><div></div></div>
+</div>
+
+<header class="topbar">
+  <div class="title">MULTIVERSE MATRIX</div>
+  <div class="menuBtn">☰</div>
+</header>
+
+<nav class="menu">
+  <a href="chart.html">Matrix</a>
+  <a href="characters.html">Characters</a>
+  <a href="story.html">Story</a>
+</nav>
+
+<div class="wrapper">
+  <div class="chart" id="chart"></div>
+</div>
+
+<div id="relationshipCard"></div>
+
+<script src="matrix.js"></script>
+<script src="garage.js"></script>
+<script src="loading.js"></script>
+</body>
+</html>

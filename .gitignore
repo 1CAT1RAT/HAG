@@ -1,0 +1,12 @@
+/.vscode/
+node_modules/
+.DS_Store
+.env
+dist/
+/*.log
+thumbs.db
+__pycache__/
+*.pyc
+/.cache/
+/.idea/
+.sass-cache/

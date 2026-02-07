@@ -1,0 +1,148 @@
+{
+  "characters": [
+    {
+      "name": "Gorgon",
+      "role": "The Mysterious One",
+      "color": "#8B008B",
+      "backstory": "A figure shrouded in mystery, Gorgon commands respect through sheer presence. Their origins are obscured in shadows, their motives unclear.",
+      "strength": 7.5,
+      "connectionScore": 42
+    },
+    {
+      "name": "Chevy",
+      "role": "The Speedster",
+      "color": "#FF6347",
+      "backstory": "Fast in thought and deed, Chevy moves through life with kinetic energy. A natural problem-solver who acts before thinking consequences through.",
+      "strength": 6.8,
+      "connectionScore": 38
+    },
+    {
+      "name": "JP",
+      "role": "The Enigma",
+      "color": "#1E90FF",
+      "backstory": "Cloaked in riddles and paradoxes, JP's true nature remains a puzzle. Their wisdom comes from unexpected places.",
+      "strength": 7.2,
+      "connectionScore": 45
+    },
+    {
+      "name": "Jeremy",
+      "role": "The Protector",
+      "color": "#32CD32",
+      "backstory": "A guardian by nature, Jeremy stands between chaos and balance. Their protective instincts drive every decision and conflict.",
+      "strength": 7.0,
+      "connectionScore": 48
+    },
+    {
+      "name": "Tea",
+      "role": "The Nurturer",
+      "color": "#FFB6C1",
+      "backstory": "Compassionate and caring, Tea brings warmth to those around them. Their strength lies not in force but in understanding.",
+      "strength": 6.2,
+      "connectionScore": 49
+    },
+    {
+      "name": "FNFFan",
+      "role": "The Rhythm Keeper",
+      "color": "#FF1493",
+      "backstory": "Music flows through their veins. FNFFan finds harmony in chaos and balance in discord.",
+      "strength": 6.5,
+      "connectionScore": 44
+    },
+    {
+      "name": "Irish",
+      "role": "The Wanderer",
+      "color": "#FF8C00",
+      "backstory": "A traveler of endless roads, Irish carries the weight of journeys untold. Always moving, never settling.",
+      "strength": 6.9,
+      "connectionScore": 41
+    },
+    {
+      "name": "Umbra",
+      "role": "The Shadow",
+      "color": "#4B0082",
+      "backstory": "Existing between light and darkness, Umbra operates in the margins. Their presence is felt rather than seen.",
+      "strength": 7.1,
+      "connectionScore": 37
+    },
+    {
+      "name": "Rebecca",
+      "role": "The Dreamer",
+      "color": "#00CED1",
+      "backstory": "Lost in worlds of imagination and possibility, Rebecca sees what others cannot. Her visions shape reality.",
+      "strength": 7.3,
+      "connectionScore": 46
+    },
+    {
+      "name": "Chao",
+      "role": "The Wild Spirit",
+      "color": "#FFD700",
+      "backstory": "Untamed and unpredictable, Chao embraces chaos. Their wild nature is both a strength and a vulnerability.",
+      "strength": 6.7,
+      "connectionScore": 43
+    },
+    {
+      "name": "Bloo",
+      "role": "The Dreamer's Friend",
+      "color": "#87CEEB",
+      "backstory": "A companion to those who dream, Bloo brings levity and support. Small in stature, infinite in heart.",
+      "strength": 5.8,
+      "connectionScore": 47
+    },
+    {
+      "name": "Good Woman",
+      "role": "The Beacon",
+      "color": "#FFA500",
+      "backstory": "A light in darkness, Good Woman represents hope and moral clarity. Her convictions are unshakeable.",
+      "strength": 7.4,
+      "connectionScore": 50
+    },
+    {
+      "name": "Evil Man",
+      "role": "The Antagonist",
+      "color": "#DC143C",
+      "backstory": "Driven by ambition and ego, Evil Man challenges the status quo through conflict. His motivations are complex.",
+      "strength": 7.6,
+      "connectionScore": 35
+    },
+    {
+      "name": "PM73",
+      "role": "The Cipher",
+      "color": "#9370DB",
+      "backstory": "An artificial construct or digital entity, PM73 exists in the space between code and consciousness. Purpose unclear.",
+      "strength": 7.8,
+      "connectionScore": 40
+    },
+    {
+      "name": "Killer Jeremy",
+      "role": "The Darker Self",
+      "color": "#8B0000",
+      "backstory": "A twisted reflection of Jeremy, this version chose violence over protection. A cautionary tale of corruption.",
+      "strength": 7.9,
+      "connectionScore": 34
+    },
+    {
+      "name": "Pestilence",
+      "role": "The Chaos",
+      "color": "#556B2F",
+      "backstory": "A force of entropy and decay, Pestilence spreads disruption wherever they go. Whether force or consequence remains unknown.",
+      "strength": 8.0,
+      "connectionScore": 31
+    },
+    {
+      "name": "Queen of Jesters",
+      "role": "The Trickster",
+      "color": "#FF69B4",
+      "backstory": "A master of manipulation and misdirection, the Queen weaves games of wit and cunning. Nothing is as it seems.",
+      "strength": 7.5,
+      "connectionScore": 39
+    },
+    {
+      "name": "Green Guy",
+      "role": "The Observer",
+      "color": "#00FF00",
+      "backstory": "Quietly watching from the margins, Green Guy sees more than he reveals. His silence speaks volumes.",
+      "strength": 6.4,
+      "connectionScore": 44
+    }
+  ]
+}
