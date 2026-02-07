@@ -273,7 +273,7 @@ window.onload = async () => {
       </div>
 
       <div class="char-detail-render">
-        <img src="images/${renderName}_render.png" alt="${char.name} Render" class="char-render" onerror="this.onerror=null;this.src='images/bloo_render.png'">
+        <img src="renders/${renderName}_render.png" alt="${char.name} Render" class="char-render" onerror="this.onerror=null;this.src='images/bloo_render.png'">
       </div>
     `;
 
@@ -287,7 +287,7 @@ window.onload = async () => {
       const dimg = detailContainer.querySelector('.char-detail-icon');
       if (dimg) dimg.onerror = () => { dimg.onerror = null; dimg.src = 'icons/bloo_icon.png'; };
       const rimg = detailContainer.querySelector('.char-render');
-      if (rimg) rimg.onerror = () => { rimg.onerror = null; rimg.src = 'images/bloo_render.png'; };
+      if (rimg) rimg.onerror = () => { rimg.onerror = null; rimg.src = 'renders/bloo_render.png'; };
     }, 40);
   }
 
