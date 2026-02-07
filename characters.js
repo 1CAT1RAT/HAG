@@ -64,6 +64,55 @@ window.onload = async () => {
     });
   }, 50);
 
+  // Runtime validation: try alternate icon filenames if the original 404s (helps on case-sensitive hosts)
+  function tryAlternateIcons(imgEl, baseName) {
+    const candidates = [
+      `icons/${baseName}_icon.png`,
+      `icons/${baseName}.png`,
+      `icons/${baseName}_icon.PNG`,
+      `icons/${baseName}_icon.jpg`,
+      `icons/${baseName}_icon.jpeg`,
+      `icons/${baseName.charAt(0).toUpperCase() + baseName.slice(1)}_icon.png`
+    ];
+
+    let idx = 0;
+    const tryNext = () => {
+      if (idx >= candidates.length) {
+        console.warn(`characters.js: all icon attempts failed for ${baseName}, using default`);
+        imgEl.src = 'icons/bloo_icon.png';
+        return;
+      }
+      const url = candidates[idx++];
+      const tester = new Image();
+      tester.onload = () => {
+        console.log(`characters.js: found icon for ${baseName}: ${url}`);
+        imgEl.src = url;
+      };
+      tester.onerror = () => {
+        // try next candidate
+        tryNext();
+      };
+      tester.src = url;
+    };
+    tryNext();
+  }
+
+  // Run checks for each card icon (log the attempted srcs)
+  setTimeout(() => {
+    document.querySelectorAll('.char-card').forEach(card => {
+      const img = card.querySelector('.card-icon');
+      if (!img) return;
+      const src = img.getAttribute('src') || '';
+      console.log('characters.js: card icon initial src ->', src);
+      // If image currently failed (naturalWidth === 0) or the path looks likely missing, try alternates
+      if (img.naturalWidth === 0) {
+        const nameMatch = src.match(/icons\/(.*?)(?:_icon)?\.(png|jpg|jpeg|PNG)/);
+        const base = nameMatch ? nameMatch[1].replace(/\.(png|jpg|jpeg)$/i, '') : null;
+        if (base) tryAlternateIcons(img, base);
+      }
+    });
+  }, 200);
+
   // Debug: report how many cards were appended
   setTimeout(() => {
     const count = grid.querySelectorAll('.char-card').length;
