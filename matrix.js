@@ -139,7 +139,7 @@ function showRelationship(cell,rowIndex,colIndex){
     }
   });
 }
-// Remove dim/glow when clicking outside cells
+
 // Remove dim/glow when clicking outside cells
 document.body.addEventListener('click', e => {
   if (!e.target.classList.contains('cell')) {
@@ -154,16 +154,5 @@ document.querySelector(".menuBtn").onclick=e=>{
   e.stopPropagation();
   document.querySelector(".menu").classList.toggle("open");
 };
-
-// search
-const searchBox = document.querySelector('.searchBox');
-if (searchBox) {
-  searchBox.addEventListener('input', e => {
-    const v = e.target.value.toLowerCase();
-    document.querySelectorAll('.name,.header').forEach(el => {
-      el.style.display = el.textContent.toLowerCase().includes(v) ? 'flex' : 'none';
-    });
-  });
-}
 
 };
