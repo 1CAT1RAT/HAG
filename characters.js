@@ -2,6 +2,7 @@ const ICON_FALLBACK = "icons/bloo_icon.png";
 const RENDER_FALLBACK = "renders/placeholder_render.png";
 const REFRESH_TOKEN = String(Date.now());
 const CHARACTER_MUSIC = {
+  chevy: "music/Chevy_Song.wav",
   evil_man: "music/EvilMan_Song.mp3",
   fnffan: "music/fnffan_song.mp3",
   green_guy: "music/GreenGuy_Song.wav",
