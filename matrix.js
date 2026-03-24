@@ -1,5 +1,6 @@
 
 // Expose data globally for use in other pages
+const ASSET_VERSION = "20260324-icons-2";
 const MATRIX_CHARACTERS = ["gorgon","Chevy","JP","Jeremy","Tea","FNFFan","Irish","Umbra",
 "Rebecca","Chao","Bloo","Good Woman","Evil Man","PM73","Killer Jeremy","Pestilence","Queen of Jesters","Green Guy"];
 const MATRIX_DATA = [
@@ -40,7 +41,7 @@ characters.forEach((c, colIndex) => {
   const header = document.createElement("div");
   header.className="header";
   const img = document.createElement("img");
-  img.src="icons/"+c.toLowerCase().replaceAll(" ","_")+"_icon.png";
+  img.src=buildIconSrc(c);
   const span = document.createElement("span");
   span.textContent=c;
   header.append(img,span);
@@ -59,7 +60,7 @@ characters.forEach((row,rowIndex)=>{
   const nameDiv=document.createElement("div");
   nameDiv.className="name";
   const img=document.createElement("img");
-  img.src="icons/"+row.toLowerCase().replaceAll(" ","_")+"_icon.png";
+  img.src=buildIconSrc(row);
   const span=document.createElement("span");
   span.textContent=row;
   nameDiv.append(img,span);
@@ -156,3 +157,8 @@ document.querySelector(".menuBtn").onclick=e=>{
 };
 
 };
+
+function buildIconSrc(name) {
+  const slug = String(name).toLowerCase().replaceAll(" ","_");
+  return `icons/${slug}_icon.png?v=${ASSET_VERSION}`;
+}

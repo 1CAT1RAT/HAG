@@ -306,6 +306,7 @@
 
 .detail-scene {
   --accent: #808080;
+  --render-width: min(32vw, 420px);
   position: relative;
   min-height: min(760px, calc(100vh - 150px));
   border: 1px solid rgba(110, 110, 110, 0.4);
@@ -454,7 +455,6 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
-  padding-right: min(27vw, 360px);
 }
 
 .char-detail-stats h3,
@@ -540,7 +540,7 @@
   position: absolute;
   top: 18px;
   bottom: 18px;
-  width: min(37vw, 480px);
+  width: var(--render-width);
   pointer-events: none;
   z-index: 2;
   display: flex;
@@ -553,7 +553,8 @@
 }
 
 .detail-scene--bad .char-detail-render {
-  left: -12px;
+  left: -88px;
+  width: min(27vw, 340px);
 }
 
 .char-detail-render-bg,
@@ -588,7 +589,13 @@
 
 .detail-scene--bad .char-detail-render-bg,
 .detail-scene--bad .char-render {
-  transform: translateX(-120px);
+  transform: translateX(-150px);
+}
+
+.detail-scene--bad .char-render,
+.detail-scene--bad .char-detail-render-bg {
+  object-position: left bottom;
+  background-position: left bottom;
 }
 
 .char-detail-container.show .char-detail-render-bg,
@@ -636,12 +643,13 @@
     padding: 28px;
   }
 
-  .char-detail-info {
-    padding-right: min(24vw, 240px);
+  .char-detail-render {
+    width: min(30vw, 340px);
   }
 
-  .char-detail-render {
-    width: min(34vw, 380px);
+  .detail-scene--bad .char-detail-render {
+    left: -70px;
+    width: min(24vw, 280px);
   }
 }
 

@@ -1,5 +1,6 @@
 const ICON_FALLBACK = "icons/bloo_icon.png";
 const RENDER_FALLBACK = "renders/placeholder_render.png";
+const ASSET_VERSION = "20260324-icons-2";
 
 const ALIGNMENT_OVERRIDES = {
   gorgon: "good",
@@ -93,7 +94,7 @@ async function initCharactersPage() {
           <article class="char-detail-card">
             <div class="char-detail-icon-wrapper">
               <img
-                src="icons/${slug}_icon.png"
+                src="${buildIconSrc(slug)}"
                 alt="${escapeHtml(character.name)} icon"
                 class="char-detail-icon"
               >
@@ -136,7 +137,7 @@ async function initCharactersPage() {
         <aside class="char-detail-render">
           <div class="char-detail-render-bg" aria-hidden="true"></div>
           <img
-            src="renders/${slug}_render.png"
+            src="${buildRenderSrc(slug)}"
             alt="${escapeHtml(character.name)} render"
             class="char-render"
           >
@@ -150,14 +151,14 @@ async function initCharactersPage() {
     if (detailIcon) {
       detailIcon.onerror = () => {
         detailIcon.onerror = null;
-        detailIcon.src = ICON_FALLBACK;
+        detailIcon.src = withAssetVersion(ICON_FALLBACK);
       };
     }
 
     if (detailRender) {
       detailRender.onerror = () => {
         detailRender.onerror = null;
-        detailRender.src = RENDER_FALLBACK;
+        detailRender.src = withAssetVersion(RENDER_FALLBACK);
       };
     }
 
@@ -227,7 +228,7 @@ function renderCharacterGrid(characters, grid, onSelect) {
       <div class="card-glow"></div>
       <div class="card-inner">
         <div class="card-icon-wrapper">
-          <img src="icons/${slug}_icon.png" alt="${escapeHtml(character.name)}" class="card-icon">
+          <img src="${buildIconSrc(slug)}" alt="${escapeHtml(character.name)}" class="card-icon">
           <div class="icon-bg" style="background:${character.color}33;"></div>
         </div>
         <div class="card-info">
@@ -242,7 +243,7 @@ function renderCharacterGrid(characters, grid, onSelect) {
     if (icon) {
       icon.onerror = () => {
         icon.onerror = null;
-        icon.src = ICON_FALLBACK;
+        icon.src = withAssetVersion(ICON_FALLBACK);
       };
     }
 
@@ -324,6 +325,18 @@ function slugifyCharacterName(name) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_+|_+$/g, "");
+}
+
+function buildIconSrc(slug) {
+  return withAssetVersion(`icons/${slug}_icon.png`);
+}
+
+function buildRenderSrc(slug) {
+  return withAssetVersion(`renders/${slug}_render.png`);
+}
+
+function withAssetVersion(path) {
+  return `${path}?v=${ASSET_VERSION}`;
 }
 
 function escapeHtml(value) {
