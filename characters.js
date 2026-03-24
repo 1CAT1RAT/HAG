@@ -1,6 +1,6 @@
 const ICON_FALLBACK = "icons/bloo_icon.png";
 const RENDER_FALLBACK = "renders/placeholder_render.png";
-const ASSET_VERSION = "20260324-scene-2";
+const REFRESH_TOKEN = String(Date.now());
 
 const ALIGNMENT_OVERRIDES = {
   gorgon: "good",
@@ -355,7 +355,7 @@ function buildRenderMarkup(character, slug, alignment) {
 }
 
 function withAssetVersion(path) {
-  return `${path}?v=${ASSET_VERSION}`;
+  return `${path}?v=${REFRESH_TOKEN}`;
 }
 
 function escapeHtml(value) {
