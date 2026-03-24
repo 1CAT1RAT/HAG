@@ -4,7 +4,9 @@ const REFRESH_TOKEN = String(Date.now());
 const CHARACTER_MUSIC = {
   evil_man: "music/EvilMan_Song.mp3",
   fnffan: "music/fnffan_song.mp3",
+  green_guy: "music/GreenGuy_Song.wav",
   queen_of_jesters: "music/Queen_Song.mp3",
+  rebecca: "music/Rebecca_Song.mp3",
   tea: "music/Tea_Song.mp3"
 };
 
@@ -100,54 +102,58 @@ async function initCharactersPage() {
       >
         <div class="detail-scene-bg" aria-hidden="true"></div>
 
-        <div class="detail-content-grid">
-          <article class="${detailCardClass}">
-            <div class="${iconWrapperClass}">
-              <img
-                src="${buildIconSrc(slug)}"
-                alt="${escapeHtml(character.name)} icon"
-                class="char-detail-icon"
-              >
-            </div>
-            <p class="detail-alignment-tag">${alignment === "bad" ? "Bad Presence" : "Good Presence"}</p>
-            <h2 class="char-detail-name">${escapeHtml(character.name)}</h2>
-            <p class="char-detail-role">${escapeHtml(character.role)}</p>
-          </article>
+        <div class="detail-shell">
+          <div class="detail-main">
+            <div class="detail-top-row">
+              <article class="${detailCardClass}">
+                <div class="${iconWrapperClass}">
+                  <img
+                    src="${buildIconSrc(slug)}"
+                    alt="${escapeHtml(character.name)} icon"
+                    class="char-detail-icon"
+                  >
+                </div>
+                <p class="detail-alignment-tag">${alignment === "bad" ? "Bad Presence" : "Good Presence"}</p>
+                <h2 class="char-detail-name">${escapeHtml(character.name)}</h2>
+                <p class="char-detail-role">${escapeHtml(character.role)}</p>
+              </article>
 
-          <section class="char-detail-stats">
-            <h3>Character Stats</h3>
-            ${buildStatRow("STR", character.stats.str, 10, "linear-gradient(90deg, #ff7a59, var(--accent))")}
-            ${buildStatRow("DEF", character.stats.def, 10, "linear-gradient(90deg, #5dc7b5, var(--accent))")}
-            ${buildStatRow("DEX", character.stats.dex, 10, "linear-gradient(90deg, #f4cf64, var(--accent))")}
-            ${buildStatRow("INT", character.stats.int, 10, "linear-gradient(90deg, #95b8ff, var(--accent))")}
-            ${buildStatRow("CHR", character.stats.chr, 10, "linear-gradient(90deg, #ff95b4, var(--accent))")}
-            ${buildStatRow("SPD", character.stats.spd, 10, "linear-gradient(90deg, #7bd1ff, var(--accent))")}
-          </section>
-
-          <section class="char-detail-info">
-            <div class="detail-section">
-              <h3>About Them</h3>
-              <p>${escapeHtml(character.aboutThem)}</p>
+              <section class="char-detail-stats">
+                <h3>Character Stats</h3>
+                ${buildStatRow("STR", character.stats.str, 10, "linear-gradient(90deg, #ff7a59, var(--accent))")}
+                ${buildStatRow("DEF", character.stats.def, 10, "linear-gradient(90deg, #5dc7b5, var(--accent))")}
+                ${buildStatRow("DEX", character.stats.dex, 10, "linear-gradient(90deg, #f4cf64, var(--accent))")}
+                ${buildStatRow("INT", character.stats.int, 10, "linear-gradient(90deg, #95b8ff, var(--accent))")}
+                ${buildStatRow("CHR", character.stats.chr, 10, "linear-gradient(90deg, #ff95b4, var(--accent))")}
+                ${buildStatRow("SPD", character.stats.spd, 10, "linear-gradient(90deg, #7bd1ff, var(--accent))")}
+              </section>
             </div>
 
-            <div class="detail-section">
-              <h3>Backstory</h3>
-              <p class="backstory-text">${escapeHtml(character.backstory)}</p>
-            </div>
+            <section class="char-detail-info">
+              <div class="detail-section">
+                <h3>About Them</h3>
+                <p>${escapeHtml(character.aboutThem)}</p>
+              </div>
 
-            <div class="detail-section">
-              <h3>Relationship Stats</h3>
-              ${buildStatRow("Allies", relationshipStats.allies, relationshipStats.total, "linear-gradient(90deg, #6ee7b7, var(--accent))")}
-              ${buildStatRow("Rivals", relationshipStats.rivals, relationshipStats.total, "linear-gradient(90deg, #ff6f61, #7a2c2c)")}
-              ${buildStatRow("Neutral", relationshipStats.neutral, relationshipStats.total, "linear-gradient(90deg, #d4b483, #8b7355)")}
-            </div>
-          </section>
+              <div class="detail-section">
+                <h3>Backstory</h3>
+                <p class="backstory-text">${escapeHtml(character.backstory)}</p>
+              </div>
+
+              <div class="detail-section">
+                <h3>Relationship Stats</h3>
+                ${buildStatRow("Allies", relationshipStats.allies, relationshipStats.total, "linear-gradient(90deg, #6ee7b7, var(--accent))")}
+                ${buildStatRow("Rivals", relationshipStats.rivals, relationshipStats.total, "linear-gradient(90deg, #ff6f61, #7a2c2c)")}
+                ${buildStatRow("Neutral", relationshipStats.neutral, relationshipStats.total, "linear-gradient(90deg, #d4b483, #8b7355)")}
+              </div>
+            </section>
+          </div>
+
+          <aside class="char-detail-render">
+            <div class="char-detail-render-bg" aria-hidden="true"></div>
+            ${buildRenderMarkup(character, slug, alignment)}
+          </aside>
         </div>
-
-        <aside class="char-detail-render">
-          <div class="char-detail-render-bg" aria-hidden="true"></div>
-          ${buildRenderMarkup(character, slug, alignment)}
-        </aside>
       </section>
     `;
 
