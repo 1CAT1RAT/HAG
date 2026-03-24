@@ -1,6 +1,6 @@
 const ICON_FALLBACK = "icons/bloo_icon.png";
 const RENDER_FALLBACK = "renders/placeholder_render.png";
-const ASSET_VERSION = "20260324-icons-2";
+const ASSET_VERSION = "20260324-scene-1";
 
 const ALIGNMENT_OVERRIDES = {
   gorgon: "good",
@@ -82,6 +82,8 @@ async function initCharactersPage() {
     const alignment = getCharacterAlignment(character, index, relationshipStats);
     const sceneBackground = alignment === "bad" ? "renders/Bad_BG.png" : "renders/Good_BG.png";
     const renderBackdrop = alignment === "bad" ? "renders/Bad_Render_BG.png" : "renders/Good_Render_BG.png";
+    const detailCardClass = alignment === "good" ? "char-detail-card char-detail-card--good" : "char-detail-card";
+    const iconWrapperClass = alignment === "good" ? "char-detail-icon-wrapper char-detail-icon-wrapper--framed" : "char-detail-icon-wrapper";
 
     detailContainer.innerHTML = `
       <section
@@ -91,8 +93,8 @@ async function initCharactersPage() {
         <div class="detail-scene-bg" aria-hidden="true"></div>
 
         <div class="detail-content-grid">
-          <article class="char-detail-card">
-            <div class="char-detail-icon-wrapper">
+          <article class="${detailCardClass}">
+            <div class="${iconWrapperClass}">
               <img
                 src="${buildIconSrc(slug)}"
                 alt="${escapeHtml(character.name)} icon"
@@ -136,11 +138,7 @@ async function initCharactersPage() {
 
         <aside class="char-detail-render">
           <div class="char-detail-render-bg" aria-hidden="true"></div>
-          <img
-            src="${buildRenderSrc(slug)}"
-            alt="${escapeHtml(character.name)} render"
-            class="char-render"
-          >
+          ${buildRenderMarkup(character, slug, alignment)}
         </aside>
       </section>
     `;
@@ -333,6 +331,27 @@ function buildIconSrc(slug) {
 
 function buildRenderSrc(slug) {
   return withAssetVersion(`renders/${slug}_render.png`);
+}
+
+function buildRenderMarkup(character, slug, alignment) {
+  if (slug === "green_guy" && alignment === "good") {
+    return `
+      <div
+        class="char-render char-render--sheet char-render--green-guy"
+        aria-label="${escapeHtml(character.name)} animated render"
+        role="img"
+        style="--sheet:url('${withAssetVersion("renders/green_guy_render_sheet.png")}');"
+      ></div>
+    `;
+  }
+
+  return `
+    <img
+      src="${buildRenderSrc(slug)}"
+      alt="${escapeHtml(character.name)} render"
+      class="char-render"
+    >
+  `;
 }
 
 function withAssetVersion(path) {
