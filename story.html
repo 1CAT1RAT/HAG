@@ -3,49 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <title>Story</title>
-<link rel="stylesheet" href="style.css?v=20260324-live-2">
-<link rel="stylesheet" href="garage.css?v=20260324-live-2">
+<link rel="stylesheet" href="style.css?v=20260324-steam-1">
+<link rel="stylesheet" href="garage.css?v=20260324-steam-1">
 <style>
   .story-container {
-    max-width: 900px;
+    max-width: 940px;
     margin: 0 auto;
+    padding: 30px 34px 40px;
+    background:
+      radial-gradient(circle at top, rgba(210, 173, 105, 0.08), transparent 26%),
+      linear-gradient(180deg, rgba(82, 50, 34, 0.92), rgba(39, 24, 19, 0.95));
+    border: 1px solid rgba(210, 173, 105, 0.24);
+    border-radius: 24px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
 
   .story-container h1 {
     font-size: 42px;
-    letter-spacing: 3px;
-    color: #404040;
-    text-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-shadow: 0 0 10px rgba(165, 111, 46, 0.12);
+    margin-bottom: 34px;
     text-align: center;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Cinzel", serif;
   }
 
   .story-container p {
     font-size: 15px;
-    line-height: 1.8;
-    color: #606060;
+    line-height: 1.9;
+    color: var(--muted);
     margin-bottom: 20px;
-    border-left: 2px solid #a0a0a0;
+    border-left: 3px solid rgba(210, 173, 105, 0.38);
     padding-left: 20px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Special Elite", "Courier New", Courier, monospace;
   }
 
   .story-container h2 {
     font-size: 24px;
     letter-spacing: 2px;
-    color: #404040;
+    color: var(--ink);
     margin-top: 40px;
     margin-bottom: 20px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #a0a0a0;
-    font-family: 'Courier New', Courier, monospace;
+    border-bottom: 1px solid rgba(210, 173, 105, 0.28);
+    font-family: "Cinzel", serif;
   }
 </style>
 </head>
 <body>
 
-<!-- ROAMING LINES BACKGROUND -->
 <svg class="roaming-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
   <line class="roam-line roam-line-1" x1="10" y1="50" x2="90" y2="50" stroke="#404040" stroke-width="0.3" opacity="0.15"/>
   <line class="roam-line roam-line-2" x1="50" y1="10" x2="50" y2="90" stroke="#404040" stroke-width="0.3" opacity="0.1"/>
@@ -54,7 +60,7 @@
 
 <header class="topbar">
   <div class="title">STORY</div>
-  <div class="menuBtn">☰</div>
+  <button type="button" class="menuBtn" aria-label="Open navigation menu">&#9776;</button>
 </header>
 
 <nav class="menu">
@@ -64,25 +70,22 @@
   <a href="story.html">Story</a>
 </nav>
 
-<!-- GARAGE DOOR OVERLAY -->
 <div id="garageOverlay">
   <img src="images/garage.png" alt="Garage Door" id="garageImg">
 </div>
 
-<!-- LOADING SCREEN -->
 <div id="loadingScreen">
   <div id="logo">UNTITLED</div>
   <div id="progressBar"><div></div></div>
 </div>
 
 <script>
-  // Generic fallback for any inline icons that fail to load (covers case-sensitive host issues)
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('img').forEach(img => {
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("img").forEach((img) => {
       try {
-        const src = img.getAttribute('src') || '';
-        if (src.indexOf('icons/') !== -1) {
-          img.onerror = () => { img.onerror = null; img.src = 'icons/bloo_icon.png'; };
+        const src = img.getAttribute("src") || "";
+        if (src.indexOf("icons/") !== -1) {
+          img.onerror = () => { img.onerror = null; img.src = "icons/bloo_icon.png"; };
         }
       } catch (e) { }
     });
@@ -96,11 +99,11 @@
     
     <h2>The Genesis Event</h2>
     <p>In the beginning, there was unity. A single world, held together by bonds both visible and invisible. But something changed. A threshold was crossed, a line was drawn, and the fabric of existence began to fray at the edges.</p>
-    <p>This is where our story takes place—in the aftermath, among the shattered pieces of what was and the uncertain forms of what could be.</p>
+    <p>This is where our story takes place - in the aftermath, among the shattered pieces of what was and the uncertain forms of what could be.</p>
 
     <h2>Characters Bound by Fate</h2>
     <p>Across the multiverse, characters emerge as key players in a grand narrative. Some are allies, bound by shared purpose. Others are rivals, locked in eternal conflict. And many exist in the space between, unsure of their place in this fractured world.</p>
-    <p>Their relationships—measured not in simple terms of friend or foe, but in the complex mathematics of connection and opposition—drive the story forward.</p>
+    <p>Their relationships - measured not in simple terms of friend or foe, but in the complex mathematics of connection and opposition - drive the story forward.</p>
 
     <h2>The Matrix of Existence</h2>
     <p>Every interaction matters. Every choice cascades across dimensions. The relationships between characters form a matrix of influence, a web of cause and effect that binds the multiverse together. Strong connections breed alliance. Opposing forces create tension. And neutral parties hold the balance.</p>
@@ -108,9 +111,9 @@
   </div>
 </div>
 
-<script src="garage.js?v=20260324-live-2"></script>
-<script src="story.js?v=20260324-live-2"></script>
-<script src="loading.js?v=20260324-live-2"></script>
+<script src="garage.js?v=20260324-steam-1"></script>
+<script src="story.js?v=20260324-steam-1"></script>
+<script src="loading.js?v=20260324-steam-1"></script>
 
 </body>
 </html>
