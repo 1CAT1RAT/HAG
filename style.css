@@ -19,6 +19,21 @@ body {
   position: relative;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 62%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.35s ease;
+}
+
+body.menu-open::before {
+  opacity: 1;
+}
+
 /* Prevent horizontal panning while allowing vertical scroll and natural pinch-zoom behavior */
 html, body { touch-action: pan-y; }
 
@@ -95,6 +110,12 @@ svg.roaming-lines {
   justify-content:center;
   z-index:9999;
   animation: loadingFade 0.5s ease-out;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+#loadingScreen.hide {
+  opacity: 0;
+  visibility: hidden;
 }
 @keyframes loadingFade {
   from { opacity: 1; }
@@ -108,6 +129,7 @@ svg.roaming-lines {
   margin-bottom:30px;
   text-shadow: 0 0 3px rgba(0,0,0,0.1);
   animation: logoPulse 2s ease-in-out infinite;
+  transform-origin: center;
 }
 @keyframes logoPulse {
   0%, 100% { text-shadow: 0 0 3px rgba(0,0,0,0.1); }
@@ -128,6 +150,20 @@ svg.roaming-lines {
   background: linear-gradient(90deg, #606060, #808080);
   box-shadow: none;
   transition: width 0.05s linear;
+  position: relative;
+  overflow: hidden;
+}
+#progressBar div::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  animation: progressShimmer 1.2s linear infinite;
+}
+
+@keyframes progressShimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 /* ===== TOP BAR ===== */
@@ -141,6 +177,18 @@ svg.roaming-lines {
   z-index:1000;
   border-bottom: 2px solid #a0a0a0;
   position: relative;
+  overflow: hidden;
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: -20%;
+  bottom: 0;
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: topbarSweep 4.2s ease-in-out infinite;
 }
 
 .title {
@@ -149,6 +197,17 @@ svg.roaming-lines {
   font-weight: 700;
   color: #404040;
   text-shadow: none;
+  animation: titleDrift 5s ease-in-out infinite;
+}
+
+@keyframes topbarSweep {
+  0%, 100% { transform: translateX(0); opacity: 0.2; }
+  50% { transform: translateX(240%); opacity: 0.55; }
+}
+
+@keyframes titleDrift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
 }
 
 /* menu */
@@ -169,12 +228,20 @@ svg.roaming-lines {
   color: #404040;
   background: #d8d8d8;
   border: 1px solid #a0a0a0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 .menuBtn:hover {
   transform: scale(1.1);
   background: #e8e8e8;
   border-color: #606060;
 }
+
+body.menu-open .menuBtn {
+  transform: rotate(90deg);
+  background: #efefef;
+  border-color: #707070;
+}
+
 .menu{ 
   position:fixed; 
   top:68px;
@@ -183,13 +250,19 @@ svg.roaming-lines {
   background: #d0d0d0;
   backdrop-filter: blur(2px);
   padding:20px;
-  transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, transform 0.35s ease;
   z-index:1000;
   border-left: 2px solid #a0a0a0;
   border-bottom: 2px solid #a0a0a0;
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
 }
-.menu.open{ right:8px; }
+.menu.open{
+  right:8px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
 .menu a{ 
   display:block; 
   color:#404040; 
@@ -202,13 +275,26 @@ svg.roaming-lines {
   letter-spacing: 1px;
   background: #e8e8e8;
   border: 1px solid transparent;
+  opacity: 0;
+  transform: translateX(14px);
 }
+
+.menu.open a {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.menu.open a:nth-child(1) { transition-delay: 0.05s; }
+.menu.open a:nth-child(2) { transition-delay: 0.1s; }
+.menu.open a:nth-child(3) { transition-delay: 0.15s; }
+.menu.open a:nth-child(4) { transition-delay: 0.2s; }
+
 .menu a:hover {
   color: #202020;
   background: #f0f0f0;
   border: 1px solid #808080;
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
-  transform: translateX(4px);
+  transform: translateX(6px);
 }
 
 /* wrapper */
@@ -224,6 +310,14 @@ svg.roaming-lines {
   position: relative;
   z-index: 2;
   background: transparent;
+  opacity: 0;
+  transform: translateY(18px) scale(0.99);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.loaded .wrapper {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* Chart container horizontal overscroll containment */

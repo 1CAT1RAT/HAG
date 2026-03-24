@@ -12,8 +12,11 @@
     progressBar.style.width = width + "%";
     if (width >= 100) {
       clearInterval(interval);
-      loadingScreen.style.display = "none";
-      _body.classList.add("loaded");
+      loadingScreen.classList.add("hide");
+      window.setTimeout(() => {
+        loadingScreen.style.display = "none";
+        _body.classList.add("loaded");
+      }, 420);
     }
   }, 50);
 })();

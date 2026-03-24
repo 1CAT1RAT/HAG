@@ -74,6 +74,11 @@ document.querySelectorAll(".menu a").forEach(link => {
         // If clicking same page, just close menu
         if (targetPage === currentPage) {
             document.querySelector(".menu").classList.remove("open");
+            document.body.classList.remove("menu-open");
+            const currentMenuBtn = document.querySelector(".menuBtn");
+            if (currentMenuBtn) {
+                currentMenuBtn.setAttribute("aria-expanded", "false");
+            }
             return;
         }
         
@@ -85,18 +90,28 @@ document.querySelectorAll(".menu a").forEach(link => {
 // MENU TOGGLE - works on all pages
 document.addEventListener("DOMContentLoaded", () => {
     const menuBtn = document.querySelector(".menuBtn");
+    const menu = document.querySelector(".menu");
     if (menuBtn) {
         menuBtn.onclick = e => {
             e.stopPropagation();
-            document.querySelector(".menu").classList.toggle("open");
+            if (!menu) return;
+            const isOpen = menu.classList.toggle("open");
+            document.body.classList.toggle("menu-open", isOpen);
+            menuBtn.setAttribute("aria-expanded", String(isOpen));
         };
     }
 });
 
 // Close menu when clicking elsewhere
 document.addEventListener("click", e => {
-    if (!e.target.closest(".menu") && !e.target.closest(".menuBtn")) {
-        document.querySelector(".menu").classList.remove("open");
+    const menu = document.querySelector(".menu");
+    if (!e.target.closest(".menu") && !e.target.closest(".menuBtn") && menu) {
+        menu.classList.remove("open");
+        document.body.classList.remove("menu-open");
+        const menuBtn = document.querySelector(".menuBtn");
+        if (menuBtn) {
+            menuBtn.setAttribute("aria-expanded", "false");
+        }
     }
 });
 
