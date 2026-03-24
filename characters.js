@@ -1,320 +1,351 @@
-// Character selection page functionality
-window.onload = async () => {
-  console.log('characters.js: window.onload fired');
-  let charactersData = [];
-  let detailViewOpen = false;
+const ICON_FALLBACK = "icons/bloo_icon.png";
+const RENDER_FALLBACK = "renders/placeholder_render.png";
 
-  // Function to calculate relationship stats from matrix data
-  function calculateRelationshipStats(characterIndex) {
-    if (typeof MATRIX_DATA === 'undefined' || !MATRIX_DATA[characterIndex]) {
-      return { allies: 0, rivals: 0, neutral: 0 };
-    }
-    
-    const row = MATRIX_DATA[characterIndex];
-    let allies = 0, rivals = 0, neutral = 0;
-    
-    for (let i = 0; i < row.length; i++) {
-      if (i === characterIndex) continue; // skip self
-      const value = row[i];
-      
-      if (value === 1) {
-        allies++;
-      } else if (value === 5) {
-        rivals++;
-      } else {
-        neutral++;
-      }
-    }
-    
-    return { allies, rivals, neutral };
-  }
+const ALIGNMENT_OVERRIDES = {
+  gorgon: "good",
+  chevy: "good",
+  jp: "good",
+  jeremy: "good",
+  tea: "good",
+  fnffan: "good",
+  irish: "good",
+  umbra: "good",
+  rebecca: "good",
+  chao: "good",
+  bloo: "good",
+  good_woman: "good",
+  evil_man: "bad",
+  pm73: "bad",
+  killer_jeremy: "bad",
+  pestilence: "bad",
+  queen_of_jesters: "bad",
+  green_guy: "good"
+};
 
-  // Load character data from JSON file
-  try {
-    const response = await fetch('characterData.json');
-    charactersData = await response.json();
-  } catch (error) {
-    console.error('Error loading character data:', error);
-    console.warn('Falling back to embedded character data. To fix CORS when opening files locally, serve the site over http (e.g. Live Server or a static server).');
-    // Fallback data (used when fetch fails, e.g., file:// CORS)
-    charactersData = {
-      characters: [
-        { name: 'Fallback One', role: 'Agent', color: '#808080', aboutThem: 'Fallback character.', backstory: 'put backstory here', stats: { str: 5, def: 5, dex: 5, int: 5, chr: 5, spd: 5 } },
-        { name: 'Fallback Two', role: 'Rival', color: '#606060', aboutThem: 'Fallback character two.', backstory: 'put backstory here', stats: { str: 6, def: 4, dex: 5, int: 5, chr: 3, spd: 5 } },
-        { name: 'Fallback Three', role: 'Neutral', color: '#909090', aboutThem: 'Fallback character three.', backstory: 'put backstory here', stats: { str: 4, def: 5, dex: 5, int: 6, chr: 5, spd: 5 } }
-      ]
-    };
-  }
+document.addEventListener("DOMContentLoaded", initCharactersPage);
 
-  const characters = charactersData.characters;
+async function initCharactersPage() {
+  const state = {
+    characters: [],
+    detailViewOpen: false
+  };
+
   const grid = document.getElementById("grid");
   const detailOverlay = document.getElementById("detailOverlay");
   const detailContainer = document.getElementById("detailContainer");
   const closeDetailBtn = document.getElementById("closeDetail");
+  const menuBtn = document.querySelector(".menuBtn");
+  const menu = document.querySelector(".menu");
 
-  // Generate character cards
-  characters.forEach((char, index) => {
-    const card = document.createElement("div");
-    card.className = "char-card";
-    card.dataset.index = index;
-    
-    const iconName = char.name.toLowerCase().replaceAll(" ", "_");
-    
-    card.innerHTML = `
-      <div class="card-glow"></div>
-      <div class="card-inner">
-          <div class="card-icon-wrapper">
-            <img src="icons/${iconName}_icon.png" alt="${char.name}" class="card-icon" onerror="this.onerror=null;this.src='icons/bloo_icon.png'">
-            <div class="icon-bg" style="background: ${char.color}30;"></div>
-          </div>
-        <div class="card-info">
-          <h3>${char.name}</h3>
-          <p>${char.role}</p>
-        </div>
-      </div>
-      <div class="card-shine"></div>
-    `;
-
-    card.addEventListener("click", () => showDetailView(char, index));
-    card.addEventListener("mouseenter", () => {
-      card.style.setProperty("--color", char.color);
-    });
-
-    grid.appendChild(card);
-  });
-
-  // Add fallback for any icon that fails to load (use existing bloo_icon.png)
-  setTimeout(() => {
-    document.querySelectorAll('.card-icon').forEach(img => {
-      img.onerror = () => { img.onerror = null; img.src = 'icons/bloo_icon.png'; };
-    });
-  }, 50);
-
-  // Runtime validation: try alternate icon filenames if the original 404s (helps on case-sensitive hosts)
-  function tryAlternateIcons(imgEl, baseName) {
-    const candidates = [
-      `icons/${baseName}_icon.png`,
-      `icons/${baseName}.png`,
-      `icons/${baseName}_icon.PNG`,
-      `icons/${baseName}_icon.jpg`,
-      `icons/${baseName}_icon.jpeg`,
-      `icons/${baseName.charAt(0).toUpperCase() + baseName.slice(1)}_icon.png`
-    ];
-
-    let idx = 0;
-    const tryNext = () => {
-      if (idx >= candidates.length) {
-        console.warn(`characters.js: all icon attempts failed for ${baseName}, using default`);
-        imgEl.src = 'icons/green_guy_icon.png';
-        return;
-      }
-      const url = candidates[idx++];
-      const tester = new Image();
-      tester.onload = () => {
-        console.log(`characters.js: found icon for ${baseName}: ${url}`);
-        imgEl.src = url;
-      };
-      tester.onerror = () => {
-        // try next candidate
-        tryNext();
-      };
-      tester.src = url;
-    };
-    tryNext();
+  if (!grid || !detailOverlay || !detailContainer || !closeDetailBtn) {
+    return;
   }
 
-  // Run checks for each card icon (log the attempted srcs)
-  setTimeout(() => {
-    document.querySelectorAll('.char-card').forEach(card => {
-      const img = card.querySelector('.card-icon');
-      if (!img) return;
-      const src = img.getAttribute('src') || '';
-      console.log('characters.js: card icon initial src ->', src);
-      // If image currently failed (naturalWidth === 0) or the path looks likely missing, try alternates
-      if (img.naturalWidth === 0) {
-        const nameMatch = src.match(/icons\/(.*?)(?:_icon)?\.(png|jpg|jpeg|PNG)/);
-        const base = nameMatch ? nameMatch[1].replace(/\.(png|jpg|jpeg)$/i, '') : null;
-        if (base) tryAlternateIcons(img, base);
-      }
-    });
-  }, 200);
+  state.characters = await loadCharacterData();
+  renderCharacterGrid(state.characters, grid, showDetailView);
 
-  // Debug: report how many cards were appended
-  setTimeout(() => {
-    const count = grid.querySelectorAll('.char-card').length;
-    console.log(`characters.js: appended ${count} char-card elements to #grid`);
-    if (!count) console.warn('characters.js: no cards found in grid — check if #grid exists and characters.json loaded');
-  }, 100);
+  closeDetailBtn.addEventListener("click", closeDetailView);
+  detailOverlay.addEventListener("click", closeDetailView);
+  detailContainer.addEventListener("click", (event) => event.stopPropagation());
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && state.detailViewOpen) {
+      closeDetailView();
+    }
+  });
+
+  if (menuBtn && menu) {
+    menuBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      menu.classList.toggle("open");
+    });
+  }
+
+  document.querySelectorAll(".menu a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menu?.classList.remove("open");
+    });
+  });
 
   function closeDetailView() {
-    detailViewOpen = false;
+    state.detailViewOpen = false;
     detailOverlay.classList.remove("show");
     detailContainer.classList.remove("show");
     closeDetailBtn.classList.remove("show");
     grid.classList.remove("hidden");
     document.body.style.overflow = "";
-    
-    setTimeout(() => {
-      detailContainer.innerHTML = "";
-    }, 1000);
+
+    window.setTimeout(() => {
+      if (!state.detailViewOpen) {
+        detailContainer.innerHTML = "";
+      }
+    }, 450);
   }
 
-  function showDetailView(char, index) {
-    // Prevent opening if detail view is already open (cooldown)
-    if (detailViewOpen) {
+  function showDetailView(character, index) {
+    if (state.detailViewOpen) {
       return;
     }
-    detailViewOpen = true;
 
-    // Hide grid
+    state.detailViewOpen = true;
     grid.classList.add("hidden");
     document.body.style.overflow = "hidden";
 
-    const iconName = char.name.toLowerCase().replaceAll(" ", "_");
-    const renderName = char.name.toLowerCase().replaceAll(" ", "_");
-
-    // Calculate relationship stats from matrix
+    const slug = slugifyCharacterName(character.name);
     const relationshipStats = calculateRelationshipStats(index);
-    char.allies = relationshipStats.allies;
-    char.rivals = relationshipStats.rivals;
-    char.neutral = relationshipStats.neutral;
+    const alignment = getCharacterAlignment(character, index, relationshipStats);
+    const sceneBackground = alignment === "bad" ? "renders/Bad_BG.png" : "renders/Good_BG.png";
+    const renderBackdrop = alignment === "bad" ? "renders/Bad_Render_BG.png" : "renders/Good_Render_BG.png";
 
-    // Create detail view
     detailContainer.innerHTML = `
-      <div class="char-detail-card">
-        <div class="char-detail-icon-wrapper">
-          <img src="icons/${iconName}_icon.png" alt="${char.name}" class="char-detail-icon" onerror="this.onerror=null;this.src='icons/bloo_icon.png'">
-        </div>
-        <h2 class="char-detail-name" style="color: ${char.color}">${char.name}</h2>
-        <p class="char-detail-role">${char.role}</p>
-      </div>
+      <section
+        class="detail-scene detail-scene--${alignment}"
+        style="--accent:${character.color}; --scene-bg:url('${sceneBackground}'); --render-bg:url('${renderBackdrop}');"
+      >
+        <div class="detail-scene-bg" aria-hidden="true"></div>
 
-      <div class="char-detail-stats">
-        <h3>Character Stats</h3>
-        <div class="stat-row">
-          <span class="stat-label">STR</span>
-          <div class="stat-bar">
-            <div class="stat-fill" style="width: ${(char.stats.str / 10) * 100}%; background: linear-gradient(90deg, #ff6b6b, rgba(124, 58, 237, 0.8));"></div>
-          </div>
-          <span class="stat-value">${char.stats.str}/10</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">DEF</span>
-          <div class="stat-bar">
-            <div class="stat-fill" style="width: ${(char.stats.def / 10) * 100}%; background: linear-gradient(90deg, #4ecdc4, rgba(124, 58, 237, 0.8));"></div>
-          </div>
-          <span class="stat-value">${char.stats.def}/10</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">DEX</span>
-          <div class="stat-bar">
-            <div class="stat-fill" style="width: ${(char.stats.dex / 10) * 100}%; background: linear-gradient(90deg, #ffe66d, rgba(124, 58, 237, 0.8));"></div>
-          </div>
-          <span class="stat-value">${char.stats.dex}/10</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">INT</span>
-          <div class="stat-bar">
-            <div class="stat-fill" style="width: ${(char.stats.int / 10) * 100}%; background: linear-gradient(90deg, #a29bfe, rgba(124, 58, 237, 0.8));"></div>
-          </div>
-          <span class="stat-value">${char.stats.int}/10</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">CHR</span>
-          <div class="stat-bar">
-            <div class="stat-fill" style="width: ${(char.stats.chr / 10) * 100}%; background: linear-gradient(90deg, #fd79a8, rgba(124, 58, 237, 0.8));"></div>
-          </div>
-          <span class="stat-value">${char.stats.chr}/10</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">SPD</span>
-          <div class="stat-bar">
-            <div class="stat-fill" style="width: ${(char.stats.spd / 10) * 100}%; background: linear-gradient(90deg, #74b9ff, rgba(124, 58, 237, 0.8));"></div>
-          </div>
-          <span class="stat-value">${char.stats.spd}/10</span>
-        </div>
-      </div>
-
-      <div class="char-detail-info">
-        <div class="detail-section">
-          <h3>About Them</h3>
-          <p>${char.aboutThem}</p>
-        </div>
-
-        <div class="detail-section">
-          <h3>Backstory</h3>
-          <p class="backstory-text">${char.backstory}</p>
-        </div>
-
-        <div class="detail-section">
-          <h3>Relationship Stats</h3>
-          <div class="stat-row">
-            <span class="stat-label">Allies</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.allies / 18) * 100}%; background: linear-gradient(90deg, ${char.color}, rgba(124, 58, 237, 0.8));"></div>
+        <div class="detail-content-grid">
+          <article class="char-detail-card">
+            <div class="char-detail-icon-wrapper">
+              <img
+                src="icons/${slug}_icon.png"
+                alt="${escapeHtml(character.name)} icon"
+                class="char-detail-icon"
+              >
             </div>
-            <span class="stat-value">${char.allies}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Rivals</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.rivals / 18) * 100}%; background: linear-gradient(90deg, #ef4444, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.rivals}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Neutral</span>
-            <div class="stat-bar">
-              <div class="stat-fill" style="width: ${(char.neutral / 18) * 100}%; background: linear-gradient(90deg, #8b7355, rgba(124, 58, 237, 0.8));"></div>
-            </div>
-            <span class="stat-value">${char.neutral}</span>
-          </div>
-        </div>
-      </div>
+            <p class="detail-alignment-tag">${alignment === "bad" ? "Bad Presence" : "Good Presence"}</p>
+            <h2 class="char-detail-name">${escapeHtml(character.name)}</h2>
+            <p class="char-detail-role">${escapeHtml(character.role)}</p>
+          </article>
 
-      <div class="char-detail-render">
-        <img src="renders/${renderName}_render.png" alt="${char.name} Render" class="char-render" onerror="this.onerror=null;this.src='renders/placeholder_render.png'">
-      </div>
+          <section class="char-detail-stats">
+            <h3>Character Stats</h3>
+            ${buildStatRow("STR", character.stats.str, 10, "linear-gradient(90deg, #ff7a59, var(--accent))")}
+            ${buildStatRow("DEF", character.stats.def, 10, "linear-gradient(90deg, #5dc7b5, var(--accent))")}
+            ${buildStatRow("DEX", character.stats.dex, 10, "linear-gradient(90deg, #f4cf64, var(--accent))")}
+            ${buildStatRow("INT", character.stats.int, 10, "linear-gradient(90deg, #95b8ff, var(--accent))")}
+            ${buildStatRow("CHR", character.stats.chr, 10, "linear-gradient(90deg, #ff95b4, var(--accent))")}
+            ${buildStatRow("SPD", character.stats.spd, 10, "linear-gradient(90deg, #7bd1ff, var(--accent))")}
+          </section>
+
+          <section class="char-detail-info">
+            <div class="detail-section">
+              <h3>About Them</h3>
+              <p>${escapeHtml(character.aboutThem)}</p>
+            </div>
+
+            <div class="detail-section">
+              <h3>Backstory</h3>
+              <p class="backstory-text">${escapeHtml(character.backstory)}</p>
+            </div>
+
+            <div class="detail-section">
+              <h3>Relationship Stats</h3>
+              ${buildStatRow("Allies", relationshipStats.allies, relationshipStats.total, "linear-gradient(90deg, #6ee7b7, var(--accent))")}
+              ${buildStatRow("Rivals", relationshipStats.rivals, relationshipStats.total, "linear-gradient(90deg, #ff6f61, #7a2c2c)")}
+              ${buildStatRow("Neutral", relationshipStats.neutral, relationshipStats.total, "linear-gradient(90deg, #d4b483, #8b7355)")}
+            </div>
+          </section>
+        </div>
+
+        <aside class="char-detail-render">
+          <div class="char-detail-render-bg" aria-hidden="true"></div>
+          <img
+            src="renders/${slug}_render.png"
+            alt="${escapeHtml(character.name)} render"
+            class="char-render"
+          >
+        </aside>
+      </section>
     `;
 
-    // Show overlay and detail view
+    const detailIcon = detailContainer.querySelector(".char-detail-icon");
+    const detailRender = detailContainer.querySelector(".char-render");
+
+    if (detailIcon) {
+      detailIcon.onerror = () => {
+        detailIcon.onerror = null;
+        detailIcon.src = ICON_FALLBACK;
+      };
+    }
+
+    if (detailRender) {
+      detailRender.onerror = () => {
+        detailRender.onerror = null;
+        detailRender.src = RENDER_FALLBACK;
+      };
+    }
+
     detailOverlay.classList.add("show");
-    detailContainer.classList.add("show");
     closeDetailBtn.classList.add("show");
 
-    // Ensure detail icon has a fallback too
-    setTimeout(() => {
-      const dimg = detailContainer.querySelector('.char-detail-icon');
-      if (dimg) dimg.onerror = () => { dimg.onerror = null; dimg.src = 'icons/green_guy_icon.png'; };
-      const rimg = detailContainer.querySelector('.char-render');
-      if (rimg) rimg.onerror = () => { rimg.onerror = null; rimg.src = 'renders/placeholder_render.png'; };
-    }, 40);
+    requestAnimationFrame(() => {
+      detailContainer.classList.add("show");
+    });
   }
+}
 
-  // Close detail view
-  closeDetailBtn.addEventListener("click", closeDetailView);
-  detailOverlay.addEventListener("click", closeDetailView);
+async function loadCharacterData() {
+  try {
+    const response = await fetch("characterData.json");
+    if (!response.ok) {
+      throw new Error(`Failed to load characterData.json (${response.status})`);
+    }
 
-  // Prevent closing when clicking on detail content
-  detailContainer.addEventListener("click", (e) => {
-    e.stopPropagation();
+    const data = await response.json();
+    return Array.isArray(data.characters) ? data.characters : [];
+  } catch (error) {
+    console.error("Error loading character data:", error);
+    console.warn("Falling back to embedded character data. Serve the site over HTTP to avoid local file CORS issues.");
+
+    return [
+      {
+        name: "Fallback One",
+        role: "Agent",
+        color: "#808080",
+        aboutThem: "Fallback character.",
+        backstory: "put backstory here",
+        stats: { str: 5, def: 5, dex: 5, int: 5, chr: 5, spd: 5 }
+      },
+      {
+        name: "Fallback Two",
+        role: "Rival",
+        color: "#606060",
+        aboutThem: "Fallback character two.",
+        backstory: "put backstory here",
+        stats: { str: 6, def: 4, dex: 5, int: 5, chr: 3, spd: 5 }
+      },
+      {
+        name: "Fallback Three",
+        role: "Neutral",
+        color: "#909090",
+        aboutThem: "Fallback character three.",
+        backstory: "put backstory here",
+        stats: { str: 4, def: 5, dex: 5, int: 6, chr: 5, spd: 5 }
+      }
+    ];
+  }
+}
+
+function renderCharacterGrid(characters, grid, onSelect) {
+  const fragment = document.createDocumentFragment();
+
+  characters.forEach((character, index) => {
+    const slug = slugifyCharacterName(character.name);
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "char-card";
+    card.dataset.index = String(index);
+    card.style.setProperty("--color", character.color);
+
+    card.innerHTML = `
+      <div class="card-glow"></div>
+      <div class="card-inner">
+        <div class="card-icon-wrapper">
+          <img src="icons/${slug}_icon.png" alt="${escapeHtml(character.name)}" class="card-icon">
+          <div class="icon-bg" style="background:${character.color}33;"></div>
+        </div>
+        <div class="card-info">
+          <h3>${escapeHtml(character.name)}</h3>
+          <p>${escapeHtml(character.role)}</p>
+        </div>
+      </div>
+      <div class="card-shine"></div>
+    `;
+
+    const icon = card.querySelector(".card-icon");
+    if (icon) {
+      icon.onerror = () => {
+        icon.onerror = null;
+        icon.src = ICON_FALLBACK;
+      };
+    }
+
+    card.addEventListener("click", () => onSelect(character, index));
+    fragment.appendChild(card);
   });
 
-  // Menu toggle
-  const menuBtn = document.querySelector(".menuBtn");
-  const menu = document.querySelector(".menu");
-  
-  if (menuBtn) {
-    menuBtn.onclick = (e) => {
-      e.stopPropagation();
-      menu.classList.toggle("open");
-    };
+  grid.innerHTML = "";
+  grid.appendChild(fragment);
+}
+
+function calculateRelationshipStats(characterIndex) {
+  if (typeof MATRIX_DATA === "undefined" || !Array.isArray(MATRIX_DATA[characterIndex])) {
+    return { allies: 0, rivals: 0, neutral: 0, average: 0, total: 1 };
   }
 
-  // Close menu on nav click
-  document.querySelectorAll(".menu a").forEach(link => {
-    link.onclick = () => {
-      menu.classList.remove("open");
-    };
-  });
-};
+  const row = MATRIX_DATA[characterIndex];
+  let allies = 0;
+  let rivals = 0;
+  let neutral = 0;
+  let sum = 0;
+  let total = 0;
+
+  for (let index = 0; index < row.length; index += 1) {
+    if (index === characterIndex) {
+      continue;
+    }
+
+    const value = row[index];
+    sum += value;
+    total += 1;
+
+    if (value === 1) {
+      allies += 1;
+    } else if (value === 5) {
+      rivals += 1;
+    } else {
+      neutral += 1;
+    }
+  }
+
+  return {
+    allies,
+    rivals,
+    neutral,
+    average: total ? sum / total : 0,
+    total: total || 1
+  };
+}
+
+function getCharacterAlignment(character, index, relationshipStats) {
+  const slug = slugifyCharacterName(character.name);
+  if (ALIGNMENT_OVERRIDES[slug]) {
+    return ALIGNMENT_OVERRIDES[slug];
+  }
+
+  return relationshipStats.average >= 3 ? "bad" : "good";
+}
+
+function buildStatRow(label, value, maxValue, fillBackground) {
+  const safeMax = Math.max(maxValue || 1, 1);
+  const safeValue = Math.max(0, Math.min(value, safeMax));
+  const fillWidth = (safeValue / safeMax) * 100;
+
+  return `
+    <div class="stat-row">
+      <span class="stat-label">${escapeHtml(label)}</span>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width:${fillWidth}%; background:${fillBackground};"></div>
+      </div>
+      <span class="stat-value">${safeValue}${safeMax === 10 ? "/10" : ""}</span>
+    </div>
+  `;
+}
+
+function slugifyCharacterName(name) {
+  return String(name || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
