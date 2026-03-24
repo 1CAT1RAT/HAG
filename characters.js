@@ -1,6 +1,12 @@
 const ICON_FALLBACK = "icons/bloo_icon.png";
 const RENDER_FALLBACK = "renders/placeholder_render.png";
 const REFRESH_TOKEN = String(Date.now());
+const CHARACTER_MUSIC = {
+  evil_man: "music/EvilMan_Song.mp3",
+  fnffan: "music/fnffan_song.mp3",
+  queen_of_jesters: "music/Queen_Song.mp3",
+  tea: "music/Tea_Song.mp3"
+};
 
 const ALIGNMENT_OVERRIDES = {
   gorgon: "good",
@@ -28,7 +34,8 @@ document.addEventListener("DOMContentLoaded", initCharactersPage);
 async function initCharactersPage() {
   const state = {
     characters: [],
-    detailViewOpen: false
+    detailViewOpen: false,
+    currentAudio: null
   };
 
   const grid = document.getElementById("grid");
@@ -55,6 +62,7 @@ async function initCharactersPage() {
 
   function closeDetailView() {
     state.detailViewOpen = false;
+    stopCharacterMusic();
     detailOverlay.classList.remove("show");
     detailContainer.classList.remove("show");
     closeDetailBtn.classList.remove("show");
@@ -162,10 +170,38 @@ async function initCharactersPage() {
 
     detailOverlay.classList.add("show");
     closeDetailBtn.classList.add("show");
+    playCharacterMusic(slug);
 
     requestAnimationFrame(() => {
       detailContainer.classList.add("show");
     });
+  }
+
+  function playCharacterMusic(slug) {
+    stopCharacterMusic();
+
+    const musicPath = CHARACTER_MUSIC[slug];
+    if (!musicPath) {
+      return;
+    }
+
+    const audio = new Audio(withAssetVersion(musicPath));
+    audio.loop = true;
+    audio.volume = 0.55;
+    state.currentAudio = audio;
+    audio.play().catch(() => {
+      state.currentAudio = null;
+    });
+  }
+
+  function stopCharacterMusic() {
+    if (!state.currentAudio) {
+      return;
+    }
+
+    state.currentAudio.pause();
+    state.currentAudio.currentTime = 0;
+    state.currentAudio = null;
   }
 }
 
