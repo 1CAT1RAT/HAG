@@ -143,6 +143,8 @@ async function initCharactersPage() {
                 <p class="backstory-text">${escapeHtml(character.backstory)}</p>
               </div>
 
+              ${buildCharacterMusicSection(slug)}
+
               <div class="detail-section">
                 <h3>Relationship Stats</h3>
                 ${buildStatRow("Allies", relationshipStats.allies, relationshipStats.total, "linear-gradient(90deg, #6ee7b7, var(--accent))")}
@@ -164,6 +166,7 @@ async function initCharactersPage() {
 
     const detailIcon = detailContainer.querySelector(".char-detail-icon");
     const detailRender = detailContainer.querySelector(".char-render");
+    const musicPlayer = detailContainer.querySelector(".char-theme-player");
 
     if (detailIcon) {
       detailIcon.onerror = () => {
@@ -181,27 +184,29 @@ async function initCharactersPage() {
 
     detailOverlay.classList.add("show");
     closeDetailBtn.classList.add("show");
-    playCharacterMusic(slug);
+    playCharacterMusic(slug, musicPlayer);
 
     requestAnimationFrame(() => {
       detailContainer.classList.add("show");
     });
   }
 
-  function playCharacterMusic(slug) {
+  function playCharacterMusic(slug, audioElement) {
     stopCharacterMusic();
 
     const musicPath = CHARACTER_MUSIC[slug];
-    if (!musicPath) {
+    if (!musicPath || !audioElement) {
       return;
     }
 
-    const audio = new Audio(withAssetVersion(musicPath));
+    const audio = audioElement;
+    audio.src = withAssetVersion(musicPath);
     audio.loop = true;
+    audio.preload = "auto";
     audio.volume = 0.55;
     state.currentAudio = audio;
     audio.play().catch(() => {
-      state.currentAudio = null;
+      audio.controls = true;
     });
   }
 
@@ -414,6 +419,23 @@ function buildRenderMarkup(character, slug, alignment) {
       alt="${escapeHtml(character.name)} render"
       class="char-render"
     >
+  `;
+}
+
+function buildCharacterMusicSection(slug) {
+  const musicPath = CHARACTER_MUSIC[slug];
+  if (!musicPath) {
+    return "";
+  }
+
+  return `
+    <div class="detail-section detail-section--music">
+      <h3>Theme Song</h3>
+      <audio class="char-theme-player" controls autoplay playsinline>
+        <source src="${withAssetVersion(musicPath)}">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
   `;
 }
 

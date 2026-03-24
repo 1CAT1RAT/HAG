@@ -621,6 +621,21 @@
   gap: 10px;
 }
 
+.detail-section--music {
+  gap: 12px;
+}
+
+.char-theme-player {
+  width: 100%;
+  min-height: 40px;
+  border-radius: 12px;
+  background: rgba(20, 20, 20, 0.28);
+}
+
+.detail-scene--good .char-theme-player {
+  background: rgba(248, 255, 255, 0.65);
+}
+
 .detail-section p {
   margin: 0;
   font-size: 14px;
