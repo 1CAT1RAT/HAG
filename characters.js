@@ -92,9 +92,6 @@ async function initCharactersPage() {
     const alignment = getCharacterAlignment(character, index, relationshipStats);
     const sceneBackground = alignment === "bad" ? "renders/Bad_BG.png" : "renders/Good_BG.png";
     const renderBackdrop = alignment === "bad" ? "renders/Bad_Render_BG.png" : "renders/Good_Render_BG.png";
-    const detailCardClass = alignment === "good" ? "char-detail-card char-detail-card--good" : "char-detail-card";
-    const iconWrapperClass = alignment === "good" ? "char-detail-icon-wrapper char-detail-icon-wrapper--framed" : "char-detail-icon-wrapper";
-
     detailContainer.innerHTML = `
       <section
         class="detail-scene detail-scene--${alignment}"
@@ -104,30 +101,35 @@ async function initCharactersPage() {
 
         <div class="detail-shell">
           <div class="detail-main">
-            <div class="detail-top-row">
-              <article class="${detailCardClass}">
-                <div class="${iconWrapperClass}">
+            <section class="detail-header-band">
+              <div class="detail-header-main">
+                <div class="detail-header-icon">
                   <img
                     src="${buildIconSrc(slug)}"
                     alt="${escapeHtml(character.name)} icon"
                     class="char-detail-icon"
                   >
                 </div>
-                <p class="detail-alignment-tag">${alignment === "bad" ? "Bad Presence" : "Good Presence"}</p>
-                <h2 class="char-detail-name">${escapeHtml(character.name)}</h2>
-                <p class="char-detail-role">${escapeHtml(character.role)}</p>
-              </article>
+
+                <div class="detail-header-copy">
+                  <h2 class="char-detail-name">${escapeHtml(character.name)}</h2>
+                  <p class="char-detail-role">${escapeHtml(character.role)}</p>
+                  <p class="detail-alignment-tag">${alignment === "bad" ? "Bad Presence" : "Good Presence"}</p>
+                </div>
+              </div>
 
               <section class="char-detail-stats">
-                <h3>Character Stats</h3>
-                ${buildStatRow("STR", character.stats.str, 10, "linear-gradient(90deg, #ff7a59, var(--accent))")}
-                ${buildStatRow("DEF", character.stats.def, 10, "linear-gradient(90deg, #5dc7b5, var(--accent))")}
-                ${buildStatRow("DEX", character.stats.dex, 10, "linear-gradient(90deg, #f4cf64, var(--accent))")}
-                ${buildStatRow("INT", character.stats.int, 10, "linear-gradient(90deg, #95b8ff, var(--accent))")}
-                ${buildStatRow("CHR", character.stats.chr, 10, "linear-gradient(90deg, #ff95b4, var(--accent))")}
-                ${buildStatRow("SPD", character.stats.spd, 10, "linear-gradient(90deg, #7bd1ff, var(--accent))")}
+                <h3>Stats</h3>
+                <div class="compact-stats-grid">
+                  ${buildCompactStat("STR", character.stats.str, 10, "linear-gradient(90deg, #ff7a59, var(--accent))")}
+                  ${buildCompactStat("DEF", character.stats.def, 10, "linear-gradient(90deg, #5dc7b5, var(--accent))")}
+                  ${buildCompactStat("DEX", character.stats.dex, 10, "linear-gradient(90deg, #f4cf64, var(--accent))")}
+                  ${buildCompactStat("INT", character.stats.int, 10, "linear-gradient(90deg, #95b8ff, var(--accent))")}
+                  ${buildCompactStat("CHR", character.stats.chr, 10, "linear-gradient(90deg, #ff95b4, var(--accent))")}
+                  ${buildCompactStat("SPD", character.stats.spd, 10, "linear-gradient(90deg, #7bd1ff, var(--accent))")}
+                </div>
               </section>
-            </div>
+            </section>
 
             <section class="char-detail-info">
               <div class="detail-section">
@@ -151,7 +153,9 @@ async function initCharactersPage() {
 
           <aside class="char-detail-render">
             <div class="char-detail-render-bg" aria-hidden="true"></div>
-            ${buildRenderMarkup(character, slug, alignment)}
+            <div class="char-render-shell">
+              ${buildRenderMarkup(character, slug, alignment)}
+            </div>
           </aside>
         </div>
       </section>
@@ -355,6 +359,22 @@ function buildStatRow(label, value, maxValue, fillBackground) {
         <div class="stat-fill" style="width:${fillWidth}%; background:${fillBackground};"></div>
       </div>
       <span class="stat-value">${safeValue}${safeMax === 10 ? "/10" : ""}</span>
+    </div>
+  `;
+}
+
+function buildCompactStat(label, value, maxValue, fillBackground) {
+  const safeMax = Math.max(maxValue || 1, 1);
+  const safeValue = Math.max(0, Math.min(value, safeMax));
+  const fillWidth = (safeValue / safeMax) * 100;
+
+  return `
+    <div class="compact-stat">
+      <span class="compact-stat-label">${escapeHtml(label)}</span>
+      <div class="compact-stat-bar">
+        <div class="compact-stat-fill" style="width:${fillWidth}%; background:${fillBackground};"></div>
+      </div>
+      <span class="compact-stat-value">${safeValue}</span>
     </div>
   `;
 }
