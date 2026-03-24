@@ -1,6 +1,6 @@
 const ICON_FALLBACK = "icons/bloo_icon.png";
 const RENDER_FALLBACK = "renders/placeholder_render.png";
-const ASSET_VERSION = "20260324-scene-1";
+const ASSET_VERSION = "20260324-scene-2";
 
 const ALIGNMENT_OVERRIDES = {
   gorgon: "good",

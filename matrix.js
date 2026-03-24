@@ -1,6 +1,6 @@
 
 // Expose data globally for use in other pages
-const MATRIX_ICON_ASSET_VERSION = "20260324-icons-2";
+const MATRIX_ICON_ASSET_VERSION = "20260324-icons-3";
 const MATRIX_CHARACTERS = ["gorgon","Chevy","JP","Jeremy","Tea","FNFFan","Irish","Umbra",
 "Rebecca","Chao","Bloo","Good Woman","Evil Man","PM73","Killer Jeremy","Pestilence","Queen of Jesters","Green Guy"];
 const MATRIX_DATA = [
