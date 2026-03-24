@@ -273,12 +273,12 @@
 .char-detail-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(86, 86, 86, 0.38);
+  background: rgba(0, 0, 0, 0.78);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.45s ease;
   z-index: 50;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(2px);
 }
 
 .char-detail-overlay.show {
@@ -289,11 +289,11 @@
 .char-detail-container {
   position: fixed;
   inset: 68px 0 0;
-  padding: 8px 10px 12px;
+  padding: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(30px);
-  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(0.985);
+  transition: opacity 0.45s ease, transform 0.45s ease;
   z-index: 51;
   overflow: auto;
 }
@@ -301,16 +301,16 @@
 .char-detail-container.show {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: scale(1);
 }
 
 .detail-scene {
   --accent: #808080;
   --render-width: min(32vw, 420px);
   position: relative;
-  min-height: calc(100vh - 78px);
-  border: 1px solid rgba(110, 110, 110, 0.4);
-  border-radius: 18px;
+  min-height: calc(100vh - 68px);
+  border: 0;
+  border-radius: 0;
   overflow: hidden;
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.22), transparent 45%),
@@ -372,17 +372,17 @@
   grid-template-columns: 320px 240px minmax(340px, 520px);
   align-items: start;
   gap: 24px;
-  padding: 12px 14px;
+  padding: 12px 12px 10px;
   min-height: 100%;
 }
 
 .detail-scene--good .detail-content-grid {
-  grid-template-columns: minmax(220px, 0.72fr) minmax(220px, 0.8fr) minmax(520px, 1.7fr);
+  grid-template-columns: 240px 250px minmax(520px, 1.6fr);
   grid-template-areas:
     "card stats info";
-  align-items: stretch;
-  gap: 16px;
-  padding-right: min(29vw, 470px);
+  align-items: start;
+  gap: 12px;
+  padding-right: min(34vw, 560px);
 }
 
 .char-detail-card,
@@ -434,8 +434,8 @@
   grid-area: card;
   align-items: flex-start;
   justify-content: flex-start;
-  min-height: clamp(360px, 68vh, 760px);
-  padding: 14px 14px 18px;
+  min-height: 390px;
+  padding: 14px 12px 12px;
 }
 
 .char-detail-icon-wrapper {
@@ -452,8 +452,8 @@
 }
 
 .char-detail-icon-wrapper--framed {
-  width: 132px;
-  height: 132px;
+  width: 112px;
+  height: 112px;
   border-radius: 0;
   border: none;
   background: transparent;
@@ -473,8 +473,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 70%;
-  height: 70%;
+  width: 72%;
+  height: 72%;
   transform: translate(-50%, -50%);
   z-index: 1;
   filter: none;
@@ -515,9 +515,9 @@
 }
 
 .detail-scene--good .char-detail-name {
-  margin-top: 2px;
-  font-size: clamp(26px, 2.5vw, 36px);
-  line-height: 0.95;
+  margin-top: 4px;
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: 1;
   text-align: left;
 }
 
@@ -544,7 +544,7 @@
 
 .detail-scene--good .char-detail-role {
   text-align: left;
-  margin-top: auto;
+  margin-top: 2px;
 }
 
 .char-detail-stats,
@@ -561,8 +561,8 @@
 
 .detail-scene--good .char-detail-stats {
   grid-area: stats;
-  min-height: clamp(320px, 56vh, 620px);
-  padding: 14px 16px;
+  min-height: 390px;
+  padding: 14px 16px 12px;
 }
 
 .char-detail-info {
@@ -574,8 +574,8 @@
 
 .detail-scene--good .char-detail-info {
   grid-area: info;
-  min-height: clamp(420px, 68vh, 760px);
-  padding: 14px 16px;
+  min-height: 390px;
+  padding: 14px 16px 12px;
 }
 
 .char-detail-stats h3,
@@ -591,7 +591,7 @@
 .detail-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .detail-section p {
@@ -670,8 +670,8 @@
 
 .char-detail-render {
   position: absolute;
-  top: 8px;
-  bottom: 8px;
+  top: 0;
+  bottom: 0;
   width: var(--render-width);
   pointer-events: none;
   z-index: 2;
@@ -682,9 +682,9 @@
 
 .detail-scene--good .char-detail-render {
   right: 0;
-  top: -6px;
-  bottom: -6px;
-  width: min(34vw, 520px);
+  top: 0;
+  bottom: 0;
+  width: min(38vw, 620px);
 }
 
 .detail-scene--bad .char-detail-render {
@@ -700,7 +700,7 @@
 
 .char-detail-render-bg {
   position: absolute;
-  inset: -2% -18% -2%;
+  inset: -4% -24% -4%;
   background-image: var(--render-bg);
   background-repeat: no-repeat;
   background-size: contain;
@@ -740,7 +740,7 @@
 }
 
 .char-render--green-guy {
-  width: min(420px, 100%);
+  width: min(500px, 100%);
   aspect-ratio: 9 / 16;
   background-size: 200% 100%;
   animation:
@@ -773,7 +773,7 @@
 
 .detail-scene--good .char-detail-render-bg,
 .detail-scene--good .char-render {
-  transform: translateX(150px);
+  transform: translateX(180px);
 }
 
 .detail-scene--bad .char-detail-render-bg,
@@ -802,15 +802,15 @@
   padding: 0;
   appearance: none;
   border-radius: 50%;
-  background: rgba(245, 245, 245, 0.9);
-  border: 1px solid rgba(80, 80, 80, 0.28);
-  color: #404040;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  color: #202020;
   font-size: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
   z-index: 52;
   opacity: 0;
   pointer-events: none;
@@ -835,8 +835,8 @@
   }
 
   .detail-scene--good .detail-content-grid {
-    grid-template-columns: minmax(200px, 0.7fr) minmax(200px, 0.78fr) minmax(320px, 1.2fr);
-    padding-right: min(26vw, 340px);
+    grid-template-columns: 220px 220px minmax(320px, 1.2fr);
+    padding-right: min(34vw, 430px);
   }
 
   .char-detail-render {
@@ -844,8 +844,8 @@
   }
 
   .detail-scene--good .char-detail-render {
-    right: -6px;
-    width: min(30vw, 360px);
+    right: -10px;
+    width: min(34vw, 420px);
   }
 
   .detail-scene--bad .char-detail-render {
@@ -870,7 +870,7 @@
   }
 
   .char-detail-container {
-    padding: 10px 10px 16px;
+    padding: 0;
   }
 
   .detail-scene {
@@ -879,7 +879,7 @@
 
   .detail-content-grid {
     grid-template-columns: 1fr;
-    padding: 22px;
+    padding: 14px;
   }
 
   .detail-scene--good .detail-content-grid {
@@ -899,8 +899,8 @@
 
   .char-detail-info {
     min-height: 0;
-    padding-right: 24px;
-    padding-bottom: 260px;
+    padding-right: 14px;
+    padding-bottom: 300px;
   }
 
   .char-detail-render {
@@ -909,7 +909,7 @@
     left: 0;
     right: 0;
     width: 100%;
-    height: 260px;
+    height: 300px;
   }
 
   .char-detail-render-bg {
