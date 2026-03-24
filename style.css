@@ -153,10 +153,18 @@ svg.roaming-lines {
 
 /* menu */
 .menuBtn{ 
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:48px;
+  height:42px;
+  line-height:1;
+  flex-shrink:0;
+  appearance:none;
   cursor:pointer; 
   font-size:24px; 
   transition: all 0.3s ease;
-  padding: 8px 12px;
+  padding: 0;
   border-radius: 2px;
   color: #404040;
   background: #d8d8d8;
