@@ -34,8 +34,6 @@ async function initCharactersPage() {
   const detailOverlay = document.getElementById("detailOverlay");
   const detailContainer = document.getElementById("detailContainer");
   const closeDetailBtn = document.getElementById("closeDetail");
-  const menuBtn = document.querySelector(".menuBtn");
-  const menu = document.querySelector(".menu");
 
   if (!grid || !detailOverlay || !detailContainer || !closeDetailBtn) {
     return;
@@ -52,19 +50,6 @@ async function initCharactersPage() {
     if (event.key === "Escape" && state.detailViewOpen) {
       closeDetailView();
     }
-  });
-
-  if (menuBtn && menu) {
-    menuBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      menu.classList.toggle("open");
-    });
-  }
-
-  document.querySelectorAll(".menu a").forEach((link) => {
-    link.addEventListener("click", () => {
-      menu?.classList.remove("open");
-    });
   });
 
   function closeDetailView() {
