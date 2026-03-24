@@ -376,6 +376,14 @@
   min-height: 100%;
 }
 
+.detail-scene--good .detail-content-grid {
+  grid-template-columns: 300px 250px minmax(420px, 540px);
+  grid-template-areas:
+    "card stats info";
+  align-items: start;
+  gap: 28px;
+}
+
 .char-detail-card,
 .char-detail-stats,
 .char-detail-info {
@@ -422,8 +430,11 @@
 }
 
 .char-detail-card--good {
+  grid-area: card;
   align-items: flex-start;
   justify-content: flex-start;
+  min-height: 0;
+  padding: 20px 22px 28px;
 }
 
 .char-detail-icon-wrapper {
@@ -440,8 +451,8 @@
 }
 
 .char-detail-icon-wrapper--framed {
-  width: 220px;
-  height: 260px;
+  width: 240px;
+  height: 240px;
   border-radius: 0;
   border: none;
   background: transparent;
@@ -485,10 +496,7 @@
 }
 
 .detail-scene--good .detail-alignment-tag {
-  color: #0d3a43;
-  background: rgba(243, 255, 255, 0.92);
-  border-color: rgba(52, 131, 125, 0.34);
-  box-shadow: inset 0 0 0 1px rgba(52, 131, 125, 0.44);
+  display: none;
 }
 
 .char-detail-name {
@@ -499,6 +507,13 @@
   color: #ffffff;
   text-shadow: 0 0 18px rgba(0, 0, 0, 0.28);
   font-family: "Courier New", Courier, monospace;
+}
+
+.detail-scene--good .char-detail-name {
+  margin-top: 6px;
+  font-size: clamp(32px, 3vw, 44px);
+  line-height: 0.95;
+  text-align: left;
 }
 
 .detail-scene--good .char-detail-name,
@@ -522,6 +537,10 @@
   font-family: "Courier New", Courier, monospace;
 }
 
+.detail-scene--good .char-detail-role {
+  text-align: left;
+}
+
 .char-detail-stats,
 .char-detail-info {
   border-radius: 18px;
@@ -534,11 +553,22 @@
   gap: 10px;
 }
 
+.detail-scene--good .char-detail-stats {
+  grid-area: stats;
+  min-height: 0;
+  padding: 20px 22px;
+}
+
 .char-detail-info {
   min-height: 450px;
   display: flex;
   flex-direction: column;
   gap: 22px;
+}
+
+.detail-scene--good .char-detail-info {
+  grid-area: info;
+  min-height: 0;
 }
 
 .char-detail-stats h3,
@@ -644,7 +674,8 @@
 }
 
 .detail-scene--good .char-detail-render {
-  right: -12px;
+  right: 18px;
+  width: min(24vw, 320px);
 }
 
 .detail-scene--bad .char-detail-render {
@@ -700,9 +731,9 @@
 }
 
 .char-render--green-guy {
-  width: min(300px, 100%);
-  aspect-ratio: 1 / 2;
-  background-size: 200% 100%;
+  width: min(320px, 100%);
+  aspect-ratio: 9 / 16;
+  background-size: auto 100%;
   animation:
     greenGuyFrames 0.9s steps(2) infinite,
     greenGuyFloat 3.4s ease-in-out infinite;
@@ -790,8 +821,17 @@
     padding: 28px;
   }
 
+  .detail-scene--good .detail-content-grid {
+    grid-template-columns: 280px 220px minmax(340px, 1fr);
+  }
+
   .char-detail-render {
     width: min(30vw, 340px);
+  }
+
+  .detail-scene--good .char-detail-render {
+    right: 12px;
+    width: min(22vw, 270px);
   }
 
   .detail-scene--bad .char-detail-render {
@@ -826,6 +866,14 @@
   .detail-content-grid {
     grid-template-columns: 1fr;
     padding: 22px;
+  }
+
+  .detail-scene--good .detail-content-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "card"
+      "stats"
+      "info";
   }
 
   .char-detail-card,
