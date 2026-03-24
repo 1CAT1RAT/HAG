@@ -20,6 +20,14 @@
       .muted{color:#808080;font-size:13px;margin-top:18px}
       footer{margin-top:28px;color:#707070;font-size:13px}
       .credits{margin-top:12px}
+      .music-card{margin-top:24px;padding:18px;border:1px solid #d3d3d3;border-radius:8px;background:linear-gradient(180deg,#fafafa,#f1f1f1)}
+      .music-card h2{margin:0 0 8px 0;font-size:16px;letter-spacing:1px}
+      .music-card p{margin:0 0 12px 0;color:#666}
+      .music-player{width:100%;max-width:520px;display:block}
+      .music-link{display:inline-block;margin-top:12px;color:#404040;font-weight:700}
+      @media (max-width: 640px){
+        .wrap{margin:24px 16px;padding:24px}
+      }
     </style>
   </head>
   <body>
@@ -52,6 +60,16 @@
 
 
       <p class="muted">Tip: click a character to view details. In the matrix view you can click a column header to see that character's total score (self-score excluded).</p>
+
+      <section class="music-card" aria-labelledby="featured-track-title">
+        <h2 id="featured-track-title">Featured Track</h2>
+        <p>Chevy Song is live on the site now.</p>
+        <audio class="music-player" controls preload="none">
+          <source src="music/Chevy_Song.wav" type="audio/wav">
+          Your browser does not support the audio element.
+        </audio>
+        <a class="music-link" href="music/Chevy_Song.wav">Open audio file</a>
+      </section>
 
       <div class="credits">
         <strong>About</strong>
