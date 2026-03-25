@@ -47,14 +47,23 @@
     </div>
 
     <div class="hud-stage">
-      <div class="hud-frame">
-        <div class="hud-grid" aria-hidden="true"></div>
-        <div class="table-surface" aria-hidden="true">
-          <div class="table-glow"></div>
-          <div class="table-shadow"></div>
-        </div>
+      <div class="hud-frame" id="hudFrame">
+        <div class="hud-atmosphere" aria-hidden="true"></div>
+        <div class="scene-camera" id="sceneCamera">
+          <div class="scene-world">
+            <div class="hud-grid" aria-hidden="true"></div>
+            <div class="hud-ring ring-a" aria-hidden="true"></div>
+            <div class="hud-ring ring-b" aria-hidden="true"></div>
+            <div class="hud-beacon beacon-left" aria-hidden="true"></div>
+            <div class="hud-beacon beacon-right" aria-hidden="true"></div>
+            <div class="table-surface" aria-hidden="true">
+              <div class="table-glow"></div>
+              <div class="table-shadow"></div>
+            </div>
 
-        <div class="card-deck" id="cardDeck" aria-live="polite"></div>
+            <div class="card-deck" id="cardDeck" aria-live="polite"></div>
+          </div>
+        </div>
 
         <div class="hud-readout" id="hudReadout">
           <span class="readout-label">Current Card</span>

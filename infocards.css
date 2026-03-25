@@ -1,6 +1,10 @@
 :root {
   --hud-bg: rgba(236, 236, 236, 0.74);
   --hud-line: rgba(64, 64, 64, 0.2);
+  --camera-rotate-x: 0deg;
+  --camera-rotate-y: 0deg;
+  --camera-shift-x: 0px;
+  --camera-shift-y: 0px;
 }
 
 body {
@@ -52,14 +56,15 @@ body {
 .hud-stage {
   min-height: 0;
   position: relative;
-  perspective: 1800px;
+  perspective: 2200px;
+  perspective-origin: 50% 38%;
 }
 
 .hud-frame {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 480px;
+  min-height: 500px;
   border: 1px solid rgba(120, 120, 120, 0.24);
   border-radius: 30px;
   background:
@@ -72,17 +77,98 @@ body {
   isolation: isolate;
 }
 
-.hud-grid {
+.hud-atmosphere {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(circle at 50% 14%, rgba(255,255,255,0.86), transparent 28%),
+    radial-gradient(circle at 50% 55%, rgba(140,140,140,0.14), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,0.12), rgba(0,0,0,0.02));
+  z-index: 0;
+}
+
+.scene-camera {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform:
+    translate3d(var(--camera-shift-x), var(--camera-shift-y), 0)
+    rotateX(var(--camera-rotate-x))
+    rotateY(var(--camera-rotate-y));
+  transition: transform 0.16s ease-out;
+  z-index: 1;
+}
+
+.scene-world {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(-140px);
+}
+
+.hud-grid {
+  position: absolute;
+  left: -16%;
+  right: -16%;
+  top: -4%;
+  bottom: -28%;
+  background:
     linear-gradient(var(--hud-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--hud-line) 1px, transparent 1px);
-  background-size: 52px 52px;
+  background-size: 54px 54px;
   mask-image: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.9) 22%, rgba(0,0,0,0.35));
-  opacity: 0.58;
-  transform: perspective(1200px) rotateX(68deg) translateY(26%);
+  opacity: 0.54;
+  transform: rotateX(78deg) translateY(24%) translateZ(-40px);
   transform-origin: center bottom;
+}
+
+.hud-ring,
+.hud-beacon {
+  position: absolute;
+  pointer-events: none;
+}
+
+.hud-ring {
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.42);
+  box-shadow: 0 0 0 1px rgba(64,64,64,0.05) inset;
+  transform-style: preserve-3d;
+}
+
+.ring-a {
+  bottom: 10%;
+  width: min(780px, 80vw);
+  height: min(780px, 80vw);
+  transform: translateX(-50%) rotateX(80deg) translateZ(24px);
+  opacity: 0.42;
+}
+
+.ring-b {
+  bottom: 18%;
+  width: min(520px, 56vw);
+  height: min(520px, 56vw);
+  transform: translateX(-50%) rotateX(80deg) translateZ(70px);
+  opacity: 0.32;
+}
+
+.hud-beacon {
+  bottom: 22%;
+  width: 2px;
+  height: 170px;
+  background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.72), rgba(120,120,120,0));
+  filter: blur(0.4px);
+  opacity: 0.6;
+}
+
+.beacon-left {
+  left: 24%;
+  transform: translateZ(80px) rotateX(18deg);
+}
+
+.beacon-right {
+  right: 24%;
+  transform: translateZ(80px) rotateX(18deg);
 }
 
 .table-surface {
@@ -91,7 +177,7 @@ body {
   bottom: -11%;
   width: min(1100px, 108%);
   height: 72%;
-  transform: translateX(-50%) rotateX(76deg);
+  transform: translateX(-50%) rotateX(79deg) translateZ(10px);
   transform-origin: center bottom;
   border-radius: 36px;
   background:
@@ -122,27 +208,29 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  transform-style: preserve-3d;
 }
 
 .hud-card {
   position: absolute;
   left: 50%;
-  top: 56%;
+  top: 55%;
   width: min(240px, 26vw);
   aspect-ratio: 0.7;
   transform-style: preserve-3d;
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.35s ease,
-    filter 0.35s ease;
+    filter 0.35s ease,
+    box-shadow 0.35s ease;
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.6);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.92), rgba(220,220,220,0.84)),
+    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(232,232,232,0.9)),
     var(--card-accent, #d8d8d8);
   box-shadow:
-    0 24px 48px rgba(0,0,0,0.16),
+    0 28px 56px rgba(0,0,0,0.16),
     inset 0 1px 0 rgba(255,255,255,0.82);
 }
 
@@ -154,6 +242,7 @@ body {
     linear-gradient(150deg, rgba(255,255,255,0.7), transparent 32%),
     linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
   pointer-events: none;
+  z-index: 4;
 }
 
 .hud-card::after {
@@ -170,6 +259,37 @@ body {
   opacity: 0.65;
 }
 
+.hud-card-shell {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-style: preserve-3d;
+}
+
+.hud-card-back {
+  position: absolute;
+  inset: 6px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 24%, rgba(255,255,255,0.26), transparent 34%),
+    linear-gradient(180deg, rgba(90,90,90,0.32), rgba(240,240,240,0.12)),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.08) 0 10px, rgba(64,64,64,0.02) 10px 20px);
+  transform: translateZ(-18px) scale(0.98);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.hud-card-edge {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 4px;
+  height: 20px;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(180deg, rgba(120,120,120,0.75), rgba(235,235,235,0.25));
+  transform: translateZ(-8px) rotateX(-88deg);
+  transform-origin: center bottom;
+}
+
 .hud-card-inner {
   position: relative;
   height: 100%;
@@ -177,6 +297,8 @@ body {
   grid-template-rows: auto 1fr auto;
   padding: 14px;
   gap: 10px;
+  transform: translateZ(24px);
+  z-index: 2;
 }
 
 .hud-card-head {
@@ -210,6 +332,16 @@ body {
     linear-gradient(180deg, rgba(255,255,255,0.38), rgba(0,0,0,0.08));
 }
 
+.hud-card-portrait::before {
+  content: "";
+  position: absolute;
+  inset: 8% 8% auto;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.58), transparent 70%);
+  transform: translateZ(24px);
+}
+
 .hud-card-portrait::after {
   content: "";
   position: absolute;
@@ -223,7 +355,7 @@ body {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.16));
-  transform: translateY(6px);
+  transform: translateY(6px) translateZ(28px);
 }
 
 .hud-card-copy {
@@ -257,6 +389,10 @@ body {
 
 .hud-card.is-active {
   filter: saturate(1.04);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.24),
+    0 0 32px rgba(255,255,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.82);
 }
 
 .hud-card.is-near {
@@ -282,6 +418,7 @@ body {
   box-shadow: 0 14px 32px rgba(0,0,0,0.08);
   backdrop-filter: blur(10px);
   z-index: 3;
+  transform: translateZ(80px);
 }
 
 .readout-label {
@@ -378,7 +515,7 @@ body {
 
   .hud-card {
     width: min(210px, 56vw);
-    top: 58%;
+    top: 59%;
   }
 
   .hud-card-copy h2 {

@@ -8,8 +8,9 @@ async function initInfoCardsPage() {
   const prevButton = document.getElementById("prevCard");
   const nextButton = document.getElementById("nextCard");
   const readout = document.getElementById("hudReadout");
+  const hudFrame = document.getElementById("hudFrame");
 
-  if (!deck || !prevButton || !nextButton || !readout) {
+  if (!deck || !prevButton || !nextButton || !readout || !hudFrame) {
     return;
   }
 
@@ -22,9 +23,15 @@ async function initInfoCardsPage() {
 
   const state = {
     characters,
-    activeIndex: 0
+    activeIndex: 0,
+    pointerX: 0,
+    pointerY: 0,
+    targetX: 0,
+    targetY: 0,
+    idleTime: 0
   };
 
+  bindCameraMotion();
   renderDeck();
   syncReadout();
 
@@ -41,6 +48,43 @@ async function initInfoCardsPage() {
     }
   });
 
+  function bindCameraMotion() {
+    hudFrame.addEventListener("pointermove", (event) => {
+      const rect = hudFrame.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+
+      state.targetX = (x - 0.5) * 2;
+      state.targetY = (y - 0.5) * 2;
+      state.idleTime = 0;
+    });
+
+    hudFrame.addEventListener("pointerleave", () => {
+      state.targetX = 0;
+      state.targetY = 0;
+    });
+
+    animateCamera();
+  }
+
+  function animateCamera() {
+    state.idleTime += 0.016;
+    const idleX = Math.sin(state.idleTime * 0.9) * 0.14;
+    const idleY = Math.cos(state.idleTime * 0.7) * 0.08;
+    const desiredX = Math.abs(state.targetX) > 0.001 ? state.targetX : idleX;
+    const desiredY = Math.abs(state.targetY) > 0.001 ? state.targetY : idleY;
+
+    state.pointerX += (desiredX - state.pointerX) * 0.08;
+    state.pointerY += (desiredY - state.pointerY) * 0.08;
+
+    hudFrame.style.setProperty("--camera-rotate-x", `${-state.pointerY * 6}deg`);
+    hudFrame.style.setProperty("--camera-rotate-y", `${state.pointerX * 10}deg`);
+    hudFrame.style.setProperty("--camera-shift-x", `${state.pointerX * 10}px`);
+    hudFrame.style.setProperty("--camera-shift-y", `${state.pointerY * 8}px`);
+
+    requestAnimationFrame(animateCamera);
+  }
+
   function stepDeck(direction) {
     const total = state.characters.length;
     state.activeIndex = (state.activeIndex + direction + total) % total;
@@ -56,22 +100,28 @@ async function initInfoCardsPage() {
       const offset = getCircularOffset(index, state.activeIndex, total);
       const absOffset = Math.abs(offset);
       const slug = slugifyInfoCardName(character.name);
-      const depth = Math.max(0, 10 - absOffset);
-      const opacity = absOffset > 4 ? 0 : 1 - absOffset * 0.18;
-      const scale = absOffset === 0 ? 1 : Math.max(0.74, 1 - absOffset * 0.08);
-      const translateX = offset * 118;
-      const translateY = absOffset === 0 ? 0 : absOffset * 14;
-      const rotateY = offset * -19;
-      const rotateZ = offset * -2.6;
+      const opacity = absOffset > 5 ? 0 : 1 - absOffset * 0.17;
+      const scale = absOffset === 0 ? 1.06 : Math.max(0.68, 1 - absOffset * 0.09);
+      const spread = 156;
+      const arcLift = absOffset * absOffset * 14;
+      const translateX = offset * spread;
+      const translateY = 22 + arcLift;
+      const translateZ = 300 - absOffset * 140;
+      const rotateX = 72 - absOffset * 2;
+      const rotateY = offset * -28;
+      const rotateZ = offset * -7.5;
+      const shimmerX = state.pointerX * (absOffset === 0 ? 10 : 4);
+      const shimmerY = state.pointerY * (absOffset === 0 ? 10 : 4);
+      const zIndex = 100 + Math.max(0, 12 - absOffset);
 
       const card = document.createElement("article");
       card.className = `hud-card ${absOffset === 0 ? "is-active" : absOffset === 1 ? "is-near" : "is-far"}`;
       card.style.setProperty("--card-accent", `${character.color}22`);
       card.style.opacity = String(opacity);
-      card.style.zIndex = String(100 + depth);
+      card.style.zIndex = String(zIndex);
       card.style.transform = [
-        `translate3d(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px), ${depth * 22}px)`,
-        "rotateX(66deg)",
+        `translate3d(calc(-50% + ${translateX + shimmerX}px), calc(-50% + ${translateY + shimmerY}px), ${translateZ}px)`,
+        `rotateX(${rotateX}deg)`,
         `rotateY(${rotateY}deg)`,
         `rotateZ(${rotateZ}deg)`,
         `scale(${scale})`
@@ -79,6 +129,10 @@ async function initInfoCardsPage() {
       card.setAttribute("aria-hidden", absOffset === 0 ? "false" : "true");
 
       card.innerHTML = `
+        <div class="hud-card-shell" aria-hidden="true">
+          <div class="hud-card-back"></div>
+          <div class="hud-card-edge"></div>
+        </div>
         <div class="hud-card-inner">
           <div class="hud-card-head">
             <span>Character Card</span>
