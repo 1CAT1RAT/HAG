@@ -108,8 +108,8 @@ async function initInfoCardsPage() {
       const translateY = 55 + arcLift;
       const translateZ = 300 - absOffset * 140;
       const rotateX = 72 - absOffset * 2;
-      const rotateY = offset * -28;
-      const rotateZ = offset * -7.5;
+      const rotateY = offset * -100;
+      const rotateZ = offset * -25;
       const shimmerX = state.pointerX * (absOffset === 0 ? 10 : 4);
       const shimmerY = state.pointerY * (absOffset === 0 ? 10 : 4);
       const zIndex = 100 + Math.max(0, 12 - absOffset);
