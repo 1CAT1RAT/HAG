@@ -105,7 +105,7 @@ async function initInfoCardsPage() {
       const spread = 156;
       const arcLift = absOffset * absOffset * 14;
       const translateX = offset * spread;
-      const translateY = 22 + arcLift;
+      const translateY = 55 + arcLift;
       const translateZ = 300 - absOffset * 140;
       const rotateX = 72 - absOffset * 2;
       const rotateY = offset * -28;
